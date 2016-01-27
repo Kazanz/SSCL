@@ -16,7 +16,7 @@ from messaging import Messenger
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config.from_object(os.path.join(os.path.dirname(__file__), 'config'))
+app.config.from_object('config')
 app.config['MAIL_DEBUG'] = app.debug
 CORS(app)
 
@@ -85,14 +85,14 @@ class People(Resource):
         sheet.update(**request.form)
         return None, 204
 
-api.add_resource(People, '/people')
+api.add_resource(People, '/api/people')
 
 
 class Fields(Resource):
     def get(self):
         return sheet.fields
 
-api.add_resource(Fields, '/people/fields')
+api.add_resource(Fields, '/api/people/fields')
 
 
 class Messaging(Resource):
@@ -103,7 +103,7 @@ class Messaging(Resource):
         success = messenger.send()
         return None, 200
 
-api.add_resource(Messaging, '/msg')
+api.add_resource(Messaging, '/api/msg')
 
 
 class Confirm(Resource):
@@ -111,15 +111,23 @@ class Confirm(Resource):
         Player.confirm(hash)
         return "Thank you."
 
-api.add_resource(Confirm, '/confirm/<path:hash>')
+api.add_resource(Confirm, '/api/confirm/<path:hash>')
 
 
 class Confirmed(Resource):
     def get(self):
         return db.session.query(Player.email).filter_by(confirmed=True).all()
 
-api.add_resource(Confirmed, '/confirmed')
+api.add_resource(Confirmed, '/api/confirmed')
+
+
+class Debug(Resource):
+    def get(self):
+        from flask import current_app
+        return current_app.config['DEBUG']
+
+api.add_resource(Debug, '/api/debug')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)
