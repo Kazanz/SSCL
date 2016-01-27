@@ -1,0 +1,8 @@
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT=465
+MAIL_USE_SSL=True
+MAIL_USE_TLS=False
+MAIL_DEFAULT_SENDER = MAIL_USERNAME = 'ssclbasketball@gmail.com'
+
+SQLALCHEMY_DATABASE_URI = 'sqlite:///./sscl.db'
+SQLALCHEMY_TRACK_MODIFICATIONS = False

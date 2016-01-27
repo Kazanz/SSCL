@@ -1,0 +1,463 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>SSCL Messanger</title>
+<!-- Custom Theme files -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="keywords" content="Payment Widget Responsive, Login form web template, Sign up Web Templates, Flat Web Templates, Login signup Responsive web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+
+<style>
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,dl,dt,dd,ol,nav ul,nav li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
+article, aside, details, figcaption, figure,footer, header, hgroup, menu, nav, section {display: block;}
+ol,ul{list-style:none;margin:0;padding:0;}
+blockquote,q{quotes:none;}
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
+table{border-collapse:collapse;border-spacing:0;}
+/* start editing from here */
+a{text-decoration:none;}
+.txt-rt{text-align:right;}/* text align right */
+.txt-lt{text-align:left;}/* text align left */
+.txt-center{text-align:center;}/* text align center */
+.float-rt{float:right;}/* float right */
+.float-lt{float:left;}/* float left */
+.clear{clear:both;}/* clear float */
+.pos-relative{position:relative;}/* Position Relative */
+.pos-absolute{position:absolute;}/* Position Absolute */
+.vertical-base{	vertical-align:baseline;}/* vertical align baseline */
+.vertical-top{	vertical-align:top;}/* vertical align top */
+.underline{	padding-bottom:5px;	border-bottom: 1px solid #eee; margin:0 0 20px 0;}/* Add 5px bottom padding and a underline */
+nav.vertical ul li{	display:block;}/* vertical menu */
+nav.horizontal ul li{	display: inline-block;}/* horizontal menu */
+img{max-width:100%;}
+/*end reset*/
+/*--login start here--*/
+#data {
+    margin-top:10px;
+}
+#data li {
+    padding:5px;
+}
+ body{
+   font-size: 100%;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  transition: 0.5s all;
+  -webkit-transition: 0.5s all;
+  -moz-transition: 0.5s all;
+  -o-transition: 0.5s all;
+}
+/*--header start here--*/
+h1 {
+    text-align: center;
+    font-size: 3em;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #ff640f;
+    margin-top: 1em;
+}
+a {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+.check {
+    width: 29%;
+    margin: 3em auto;
+    background: #fff;
+    border-radius: 7px;
+    border-bottom: 4px solid #E0E0E0;
+}
+.check-head {
+    padding: 1.3em 0em 0em 0em;
+    text-align: center;
+}
+.check-head h2 {
+    font-size: 1.8em;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #000;
+	padding-bottom: 0.4em;
+}
+.check-head span {
+    color: #1fbfe7;
+	font-weight: 600;
+}
+.check small.strip {
+    background-size: cover;
+    height: 4px;
+	width:488px;
+    display: inline-block;
+}
+.check-bottom {
+    padding:1.6em 4.5em;
+}
+.check-bottom p {
+    font-size: 1.2em;
+    color: #000;
+    font-family: 'Roboto Condensed', sans-serif;
+    margin: 0em 0em 0.2em 0em;
+}
+.check-bottom input[type="text"], .check-bottom textarea {
+    font-size: 1em;
+    color: black;
+    padding: 0.5em 0.5em;
+    display: block;
+    width: 90%;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 1em;
+    border: 1px solid #1fbfe7;
+}
+.expir-picker-date{
+ 	float: left;
+    width: 31.3%;
+    margin-right: 3%;
+}
+.expir-picker-date:nth-child(3) {
+    margin-right: 0;	
+}
+.expir-picker1 ul li{
+	display:inline-block;	 
+}
+.expir-picker1 ul li select {
+    -webkit-appearance: none;
+    color: #1fbfe7;
+    outline: none;
+    border: 1px solid #1fbfe7;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 10px 42px 10px 10px;
+    margin-right: 0.6em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    -ms-appearance: none;
+	font-weight: 700;
+}
+.expir-picker1 ul li i{
+	color: #fff;
+    font-size: 1.2em;
+    background: #29c069;
+    background: -moz-linear-gradient(top, #29c069 0%, #29c069 0%, #13a952 100%, #13a952 100%, #13a952 101%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#29c069), color-stop(0%,#29c069), color-stop(100%,#13a952), color-stop(100%,#13a952), color-stop(101%,#13a952));
+    background: -webkit-linear-gradient(top, #29c069 0%,#29c069 0%,#13a952 100%,#13a952 100%,#13a952 101%);
+    background: -o-linear-gradient(top, #29c069 0%,#29c069 0%,#13a952 100%,#13a952 100%,#13a952 101%);
+    background: -ms-linear-gradient(top, #29c069 0%,#29c069 0%,#13a952 100%,#13a952 100%,#13a952 101%);
+    background: linear-gradient(to bottom, #29c069 0%,#29c069 0%,#13a952 100%,#13a952 100%,#13a952 101%);
+    border-radius: 5px;
+    width: 38px;
+    height: 38px;
+    text-align: center;
+    line-height: 2.1em;
+}
+.check-bottom input.c-num {
+    border: 1px solid #ff0000;
+    width:85%;
+}
+.cvv-numb {
+    margin: 1em 0em;
+}
+.cvv-text {
+    float: left;
+    width: 35%;
+}
+.cvv-para {
+    float: right;
+    width: 60%;
+	margin-top:2em;
+}
+.cvv-para p {
+    font-size: 1em;
+    color: #ff0000;
+    font-weight: 600;
+}
+.check input[type="submit"] {
+    font-size: 1em;
+    color: #fff;
+    background: #ff640f;
+    width: 100%;
+    padding: 0.8em 0em;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+	cursor:pointer;
+	text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.63);
+	border-bottom: 3px solid #B54706;
+}
+.check input[type="submit"]:hover {
+    background:#1fbfe7;
+	border-bottom: 3px solid #059ABF;
+	transition: 0.5s all;
+  -webkit-transition: 0.5s all;
+  -moz-transition: 0.5s all;
+  -o-transition: 0.5s all;
+}
+.clear{
+    clear:both;
+}
+/*---copyrights--*/
+.copy-right {
+    margin: 2em 0em 2em 0em;
+}
+.copy-right p {
+    text-align: center;
+    font-size:1em;
+    color:#ff640f;
+    line-height: 1.5em;
+    font-family: 'Quicksand', sans-serif;
+}
+.copy-right p a{
+  color:#1fbfe7;
+}
+.copy-right p a:hover{
+	 color:#ff640f;
+	 transition: 0.5s all;
+  -webkit-transition: 0.5s all;
+  -moz-transition: 0.5s all;
+  -o-transition: 0.5s all;
+}
+/*---media queries start here--*/
+@media(max-width:1600px){
+.check {
+    width: 30%;
+}
+.check small.strip {
+    width: 480px;
+}
+}
+@media(max-width:1440px){
+.check {
+    width: 32.5%;
+}
+.check small.strip {
+    width: 465px;
+}
+}
+@media(max-width:1366px){
+.check {
+    width: 34%;
+}
+}
+@media(max-width:1280px){
+.check {
+    width: 36.5%;
+}
+}
+@media(max-width:1024px){
+.check {
+    width: 45.5%;
+}
+}
+@media(max-width:768px){
+.check {
+    width: 61%;
+}
+}
+@media(max-width:736px){
+.check {
+    width: 65%;
+}	
+}
+@media(max-width:667px){
+.check {
+    width: 72%;
+}
+}
+@media(max-width:640px){
+.check {
+    width: 73%;
+}
+}
+@media(max-width:600px){
+.check {
+    width: 80%;
+}	
+}
+@media(max-width:568px){
+.check {
+    width: 85%;
+}
+}
+@media(max-width:480px){
+.check {
+    width: 85%;
+}
+.check-bottom {
+    padding: 1.6em 3em;
+}
+.check small.strip {
+    width: 405px;
+}
+.check-head h2 {
+    font-size: 1.5em;
+}
+.check-bottom p {
+    font-size: 1em;
+}
+.check-bottom input[type="text"] {
+    font-size: 0.8em;
+    padding: 0.4em 0.5em;
+}
+.expir-picker1 ul li select {
+    font-size: 0.8em;
+    padding: 7px 42px 7px 10px;
+}
+.check input[type="submit"] {
+    font-size: 0.9em;
+    padding: 0.7em 0em;
+}
+.check {
+    margin: 2em auto;
+}
+.copy-right p {
+    font-size: 0.9em;
+}
+h1 {
+    font-size: 2.5em;
+}
+}
+@media(max-width:414px){
+.check {
+    width: 90%;
+}
+.check small.strip {
+    width:370px;
+}
+}
+@media(max-width:384px){
+.check {
+    width: 95%;
+}
+.check small.strip {
+    width: 348px;
+}
+}
+@media(max-width:375px){
+.check {
+    width: 94%;
+}
+.check-bottom p {
+    font-size: 0.8em;
+}
+.check small.strip {
+    width: 350px;
+}
+}
+@media(max-width:320px){
+.check {
+    width: 92%;
+}
+.check small.strip {
+    width: 280px;
+}
+.check-bottom {
+    padding: 1em 1em;
+}
+.check-head h2 {
+    font-size: 1.3em;
+}
+.check-bottom p {
+    font-size: 0.8em;
+}
+.cvv-para {
+    margin-top: 1.5em;
+}
+.check input[type="submit"] {
+    font-size: 0.8em;
+}
+h1 {
+    font-size: 2em;
+    margin-top: 0.5em;
+}
+.check {
+    margin: 1em auto;
+}
+/*--media queries end here--*/
+</style>
+</head>
+<body>
+	<h1>SSCL Messenger</h1>
+<div class="check">
+    <div id="email">
+        <div class="check-head">
+           <h2>Send to: <span class="header-text">Basketball</span></h2>
+           <a id="view-confirmed" href="#">View Confirmed</a>
+	       <small class="strip"> </small>
+	    </div>
+	    <div class="check-bottom">
+	         <form id="form">
+	    	    <p>Subject</p>
+	    	    <input id="subject" type="text" placeholder="John Smith">
+	    		<p>Body</p>
+                <textarea id="body" rows="10"></textarea>
+	    		<div class="clear"> </div> 
+	    		<input id="button" type="submit" value="Send Confirmation Email">
+	    	 </form>
+	    </div>
+    </div>
+
+    <div id="confirmed" class="check">
+        <div class="check-head">
+           <h2><span class="header-text">Confirmed</span></h2>
+           <a id="send-message" href="#">Send Message</a>
+           <ul id="data"></ul>
+	    </div>
+    </div>
+</div>
+
+<script>
+var confirmed =  document.getElementById('confirmed');
+var email =  document.getElementById('email');
+var form = document.getElementById('form')
+var button = document.getElementById("button");
+var xhttp = new XMLHttpRequest();
+var submit = function(e) {
+    e.preventDefault();
+    var subject = document.getElementById('subject').value
+    var body = document.getElementById('body').value
+    var xhttp = new XMLHttpRequest();
+
+    if (!button.disabled) {
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+              button.value = "Complete!" 
+            }
+        };
+        xhttp.open("POST", "http://localhost:5000/msg", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("subject=" + subject + "&body=" + body);
+        button.value = "Your emails are being sent!"; 
+        button.disabled = true; 
+    }
+}
+
+form.addEventListener("submit", submit);
+confirmed.style.display = "none";
+
+document.getElementById("view-confirmed").addEventListener("click", function(){
+    email.style.display = "none";
+    document.getElementById('confirmed').style.display = "block";
+});
+
+document.getElementById("send-message").addEventListener("click", function(){
+    confirmed.style.display = "none";
+    email.style.display = "block";
+});
+
+xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+      var resp = JSON.parse(xhttp.responseText);
+      var data = document.getElementById("data");
+      for (var i = 0; i < resp.length; i++) {
+        data.insertAdjacentHTML('beforeend', '<li>' + resp[i] + '</li>');
+      }
+    }
+};
+xhttp.open("GET", "http://localhost:5000/confirmed", true);
+xhttp.send(null)
+
+</script>
+</body>
+</html>

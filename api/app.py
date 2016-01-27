@@ -1,11 +1,70 @@
+import os
+
 from flask import Flask, request
+from flask.ext.cors import CORS
+from flask_mail import Mail
 from flask_restful import Resource, Api
+from flask_sqlalchemy import SQLAlchemy
 
 from drive import Sheet
+from messaging import Messenger
+
+
+#############
+# Configure #
+#############
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
+app.config.from_object(os.path.join(os.path.dirname(__file__), 'config'))
+app.config['MAIL_DEBUG'] = app.debug
+CORS(app)
+
 api = Api(app)
+db = SQLAlchemy(app)
+mail = Mail(app)
+
+
+##########
+# Models #
+##########
+
+class Player(db.Model):
+    email = db.Column(db.String(40), primary_key=True)
+    hash = db.Column(db.String(10), unique=True)
+    confirmed = db.Column(db.Boolean(), default=False)
+    wins = db.Column(db.Integer, default=0)
+    losses = db.Column(db.Integer, default=0)
+
+    def __repr__(self):
+        return '<Player %r>' % self.email
+
+    @staticmethod
+    def confirm(hash):
+        player = Player.query.filter_by(hash=hash).first()
+        if player:
+            player.confirmed = True
+            db.session.add(player)
+            db.session.commit()
+
+    @staticmethod
+    def update(email, **kwargs):
+        player = Player.query.filter_by(email=email).first()
+        if not player:
+            player = Player(email=email)
+        for k, v in kwargs.items():
+            setattr(player, k, v)
+        db.session.add(player)
+        db.session.commit()
+
+
+db.create_all()
+app.Player = Player
+
+
+##############
+# End Points #
+##############
 
 sheet = Sheet()
 
@@ -24,7 +83,7 @@ class People(Resource):
 
     def post(self):
         sheet.update(**request.form)
-        return
+        return None, 204
 
 api.add_resource(People, '/people')
 
@@ -36,6 +95,30 @@ class Fields(Resource):
 api.add_resource(Fields, '/people/fields')
 
 
+class Messaging(Resource):
+    def post(self):
+        messenger = Messenger(mail, sheet)
+        messenger.subject = request.form.get('subject')
+        messenger.body = request.form.get('body')
+        success = messenger.send()
+        return None, 200
+
+api.add_resource(Messaging, '/msg')
+
+
+class Confirm(Resource):
+    def get(self, hash):
+        Player.confirm(hash)
+        return "Thank you."
+
+api.add_resource(Confirm, '/confirm/<path:hash>')
+
+
+class Confirmed(Resource):
+    def get(self):
+        return db.session.query(Player.email).filter_by(confirmed=True).all()
+
+api.add_resource(Confirmed, '/confirmed')
 
 
 if __name__ == '__main__':

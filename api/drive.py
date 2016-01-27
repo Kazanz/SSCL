@@ -49,7 +49,7 @@ class Sheet(object):
                 if value}
 
     def update(self, **data):
-        data = {k: v[0] for k, v in data.items()}
+        data = self.clean_data(**data)
         row = self.row_from_data(**data)
         if row:
             fields = self.fields
@@ -66,8 +66,18 @@ class Sheet(object):
         if email:
             return self.row_by_email(email)
 
+    def get_field_values(self, field):
+        column = self.column_by_field(field)
+        return [v for v in self.sheet.col_values(column)[1:] if v]
+
+    def column_by_field(self, field):
+        return self.fields.index(field) + 1
+
     @property
     def fields(self):
         if not self._fields:
             self._fields = [v for v in self.sheet.row_values(1) if v]
         return self._fields
+
+    def clean_data(self, **data):
+        return {k: v[0] if isinstance(v, list) else v for k, v in data.items()}

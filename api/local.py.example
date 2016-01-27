@@ -1,0 +1,3 @@
+from config import *
+
+MAIL_PASSWORD = 'PASSWORD'

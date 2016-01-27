@@ -1,3 +1,6 @@
+.bundle
 .ropeproject
-api/client_sercret.json
-w
+.vagrant
+*.pyc
+api/client_secret.json
+api/local.py
