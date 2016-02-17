@@ -16,7 +16,7 @@ from messaging import Messenger
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.config.from_object('config')
+app.config.from_object('local')
 app.config['MAIL_DEBUG'] = app.debug
 CORS(app)
 

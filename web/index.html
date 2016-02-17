@@ -408,7 +408,8 @@ h1 {
 </div>
 
 <script>
-var confirmed =  document.getElementById('confirmed');
+var apiUrl = "http://68.233.232.240:5000/api/";
+var confirmed = document.getElementById('confirmed');
 var email =  document.getElementById('email');
 var form = document.getElementById('form')
 var button = document.getElementById("button");
@@ -425,7 +426,7 @@ var submit = function(e) {
               button.value = "Complete!" 
             }
         };
-        xhttp.open("POST", "http://localhost:5000/msg", true);
+        xhttp.open("POST", apiUrl + "msg", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send("subject=" + subject + "&body=" + body);
         button.value = "Your emails are being sent!"; 
@@ -455,7 +456,7 @@ xhttp.onreadystatechange = function() {
       }
     }
 };
-xhttp.open("GET", "http://localhost:5000/confirmed", true);
+xhttp.open("GET", apiUrl + "confirmed", true);
 xhttp.send(null)
 
 </script>

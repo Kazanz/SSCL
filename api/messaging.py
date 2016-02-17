@@ -32,11 +32,15 @@ class Messenger(object):
                     email = email + ".testing"
                     phone = phone + ".testing"
                     continue
+                email = "kazanski.zachary@gmail.com"
+                phone = "8133893559@tmomail.net"
                 email_msg = Message(self.subject, recipients=[email])
                 sms_msg = Message(self.subject, recipients=[phone])
                 email_msg.body = sms_msg.body = text
                 email_msg.html = html
+                print "SENDIN EMAIL..."
                 self.mail.send(email_msg)
+                print "SENDIN TEXT..."
                 self.mail.send(sms_msg)
 
     def get_numbers(self):
@@ -53,7 +57,7 @@ class Messenger(object):
         return ''
 
     def make_msg(self, body, hash):
-        link = "{}confirm/{}".format(request.url_root, hash)
+        link = "{}/api/confirm/{}".format(request.url_root, hash)
         formatter = body + "\n\n{}"
         html_msg = '<a href="{}">Click here to confirm.</a>'.format(link)
         html = formatter.format(html_msg)
