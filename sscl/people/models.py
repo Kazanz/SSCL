@@ -27,7 +27,11 @@ class Waiver(models.Model):
     football = models.BooleanField(default=False)
     signature = models.CharField(max_length=40)
     confirmed = models.BooleanField(default=False, blank=True)
-    hash = models.CharField(max_length=8, blank=True)
+    sent = models.DateTimeField(blank=True, null=True)
+    hash = models.CharField(max_length=8, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.first + " " + self.last
 
     def save(self, *args, **kwargs):
         self.phone = re.sub("\D", "", self.phone)
@@ -36,6 +40,11 @@ class Waiver(models.Model):
     def re_hash(self):
         self.hash = unique_hash(Waiver, 'hash')
         self.confirmed = False
+
+    def confirm(self):
+        self.hash = None
+        self.confirmed = True
+        self.save()
 
     @property
     def number(self):

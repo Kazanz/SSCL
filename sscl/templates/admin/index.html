@@ -47,28 +47,84 @@
     <p>{% trans "You don't have permission to edit anything." %}</p>
 {% endif %}
     <div class="app-send module">
-    <table style="width:100%">
-    <caption>
-        <a class="section" title="Send Message">Send Message</a>
-    </caption>
-    <tr class="model-1"><td><input style="width:98%" placeholder="Subject" type="text" /></td></tr>
-    <tr class="model-1"><td><textarea rows="4" style="width:98%" placeholder="Body"></textarea></td></tr>
-    <tr class="model-1"><td><input value="Send" type="submit" /></td></tr>
-    </table>
+      <form id="send-form" method="POST">
+        {% csrf_token %}
+        <table style="width:100%">
+        <caption>
+            <a class="section" title="Send Message">Send Message</a>
+        </caption>
+        <tr style="display:none" class="form-error-msg">
+            <td>
+                <ul class="messagelist">
+                    <li class="error">A subject and a body are required.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr class="model-1"><td><input name="subject" id="subject" style="width:98%" placeholder="Subject" type="text" /></td></tr>
+        <tr class="model-1"><td><textarea name="body" id="body" rows="4" style="width:98%" placeholder="Body"></textarea></td></tr>
+        <tr class="model-1"><td><input id="send" value="Send" type="submit" /></td></tr>
+        <tr style="display:none" class="sending-msg"><td>Your emails are being sent...</td></tr>
+        <tr style="display:none" class="complete-msg">
+            <td>
+                <ul class="messagelist">
+                    <li class="success">Your message was sent successfully.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr style="display:none" class="error-msg">
+            <td>
+                <ul class="messagelist">
+                    <li class="error">An error occured! Some emails may not have been sent.</li>
+                </ul>
+            </td>
+        </tr>
+        </table>
+      </form>
     </div>
 
 </div>
+
+<script>
+ $('#send-form').on('submit', function(e){
+    e.preventDefault();
+    subject = $('#subject').val()
+    body = $('#body').val()
+    if(subject === "" || body === "") {
+        $('.form-error-msg').show()
+    } else {
+        $('.form-error-msg').hide()
+        formData = {
+            'subject': subject,
+            'body': body,
+        }
+        $('.model-1').hide();
+        $('.sending-msg').show()
+        $.ajax({
+            url : "{% url 'send' %}",
+            type: "POST",
+            data : formData,
+            success: function(data) {
+                $('.complete-msg').show()
+                $('.sending-msg').hide()
+            },
+            error: function (e) {
+                $('.sending-msg').hide()
+                $('.error-msg').show()
+            }
+        });
+    }
+});
+</script>
 {% endblock %}
 
 {% block sidebar %}
 <div id="content-related">
     <div class="module" id="recent-actions-module">
-        <h2>{% trans 'Recent actions' %}</h2>
-        <h3>{% trans 'My actions' %}</h3>
+        <h2>{% trans 'Confirmed' %}</h2>
         <ul class="actionlist">
-            {% for person in confirmed_people %}
+            {% for person in confirmed %}
             <li>
-            <a href="">{{ person.first }} {{ person.last }}</a>
+            <a>{{ person.first }} {{ person.last }}</a>
                 <br/>
             </li>
             {% endfor %}
