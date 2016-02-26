@@ -1,6 +1,6 @@
 from django import forms
 
-from people.models import Person
+from people.models import Waiver
 
 
 class Html5DateInput(forms.DateInput):
@@ -24,7 +24,7 @@ class WaiverForm(forms.ModelForm):
                 field.label = "Date of Birth"
 
     class Meta:
-        model = Person
+        model = Waiver
         exclude = ('created', 'confirmed', 'hash')
         widgets = {
             'dob': Html5DateInput()

@@ -7,7 +7,7 @@ from django.db import models
 from people.helpers import unique_hash
 
 
-class Person(models.Model):
+class Waiver(models.Model):
     CARRIERS = (
         ("@txt.att.net", "AT&T"),
         ("@tmomail.net", "T-Mobile"),
@@ -31,8 +31,12 @@ class Person(models.Model):
 
     def save(self, *args, **kwargs):
         self.phone = re.sub("\D", "", self.phone)
-        super(Person, self).save(*args, **kwargs)
+        super(Waiver, self).save(*args, **kwargs)
 
     def re_hash(self):
-        self.hash = unique_hash(Person, 'hash')
+        self.hash = unique_hash(Waiver, 'hash')
         self.confirmed = False
+
+    @property
+    def number(self):
+        return self.phone + self.carrier

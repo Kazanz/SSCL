@@ -4,3 +4,5 @@
 *.pyc
 api/client_secret.json
 api/local.py
+
+sscl/sscl/local_settings.py

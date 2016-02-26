@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
 
-from people.models import Person
+from people.models import Waiver
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
 
-class PersonAdmin(admin.ModelAdmin):
+class WaiverAdmin(admin.ModelAdmin):
     list_display = (
         'confirmed',
         'first',
@@ -19,4 +19,4 @@ class PersonAdmin(admin.ModelAdmin):
         'football',
     )
 
-admin.site.register(Person, PersonAdmin)
+admin.site.register(Waiver, WaiverAdmin)
