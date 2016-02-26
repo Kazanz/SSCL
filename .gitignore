@@ -5,5 +5,5 @@
 api/client_secret.json
 api/local.py
 
-sscl/sscl/local_settings.py
-sscl/db.sqlite3
+sscl/local_settings.py
+db.sqlite3

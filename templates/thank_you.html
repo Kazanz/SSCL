@@ -22,6 +22,12 @@
       <center>
         <h1>Thank You</h1>
         <a href="{% url 'waiver' %}">Submit another waiver.</a>
+        {% if confirmed %}
+        <h3>Confirmed</h3>
+        {% endif %}
+        {% for person in confirmed %}
+        {{ person.first }} {{ person.last }}
+        {% endfor %}
       </center>
     </div>
     <div class="col-md-4"></div>

@@ -21,6 +21,7 @@ class WaiverAdmin(admin.ModelAdmin):
 
     list_display = (
         'confirmed',
+        'sent',
         'first',
         'last',
         'email',
@@ -29,7 +30,7 @@ class WaiverAdmin(admin.ModelAdmin):
         'dob',
         'football',
         'signature',
-        'sent',
+        'created',
     )
 
 admin.site.register(Waiver, WaiverAdmin)
