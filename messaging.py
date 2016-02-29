@@ -12,11 +12,17 @@ def send_msg(request, subject, body):
             continue
         waiver.re_hash()
         msg = make_msg(request, body, waiver.hash)
-        sent = send_mail(subject, msg, settings.EMAIL_HOST_USER,
-                         [waiver.email, waiver.number], fail_silently=False)
-        if sent:
-            waiver.sent = datetime.now()
-            waiver.save()
+        try:
+            sent = send_mail(subject, msg, settings.EMAIL_HOST_USER,
+                             [waiver.email, waiver.number], fail_silently=False)
+        # Rather catch all errors and send out most emails than have it break.
+        # Otherwise don't do this.
+        except:
+            continue
+        else:
+            if sent:
+                waiver.sent = datetime.now()
+                waiver.save()
 
 
 def make_msg(request, body, hash):
