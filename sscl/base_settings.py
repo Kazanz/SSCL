@@ -25,7 +25,7 @@ SECRET_KEY = '(e^8=*b03)kph=j+=8l-ovobijqpk3*1+-77lirx$05@r)-$uj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
