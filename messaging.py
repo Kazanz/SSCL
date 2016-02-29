@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -9,6 +9,8 @@ from people.models import Waiver
 def send_msg(request, subject, body):
     for waiver in Waiver.objects.all():
         if settings.DEBUG and "kazanski" not in waiver.email:
+            continue
+        if waiver.sent > datetime.now() - timedelta(days=6):
             continue
         waiver.re_hash()
         msg = make_msg(request, body, waiver.hash)
