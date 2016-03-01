@@ -3,8 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect, get_object_or_404
 
-from messaging import send_msg
 from people.models import Waiver
+from people.tasks import send_msg
 
 
 @require_http_methods(['POST'])
@@ -14,7 +14,7 @@ def send_emails(request):
         subject = request.POST.get("subject")
         body = request.POST.get("body")
         if subject and body:
-            send_msg(request, subject, body)
+            send_msg.delay(subject, body)
             return HttpResponse(200)
     return HttpResponse(400)
 
