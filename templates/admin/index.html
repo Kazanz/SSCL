@@ -14,6 +14,7 @@
 
 {% if app_list %}
     {% for app in app_list %}
+      {% if app.app_label == "people" %}
         <div class="app-{{ app.app_label }} module">
         <table>
         <caption>
@@ -42,6 +43,7 @@
         {% endfor %}
         </table>
         </div>
+      {% endif %}
     {% endfor %}
 {% else %}
     <p>{% trans "You don't have permission to edit anything." %}</p>
@@ -67,7 +69,7 @@
         <tr style="display:none" class="complete-msg">
             <td>
                 <ul class="messagelist">
-                    <li class="success">Your message was sent successfully.</li>
+                    <li class="success">Your messages are being sent! You can check to waiver page for progess.</li>
                 </ul>
             </td>
         </tr>

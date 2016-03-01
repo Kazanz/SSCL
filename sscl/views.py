@@ -20,6 +20,7 @@ def send_emails(request):
 
 
 def confirm(request, hash):
-    waiver = get_object_or_404(Waiver, hash=hash)
-    waiver.confirm()
+    waiver = Waiver.objects.filter(hash=hash).first()
+    if waiver:
+        waiver.confirm()
     return redirect('thank-you')

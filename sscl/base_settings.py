@@ -137,26 +137,10 @@ EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = 'ssclbasketball@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/srv/www/django_debug.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
-
 BROKER_URL = 'django://'
 CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 
 BASE_URL = "http://162.243.194.29"
+
+import djcelery
+djcelery.setup_loader()

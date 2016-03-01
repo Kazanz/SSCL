@@ -1,5 +1,4 @@
-import pytz
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from celery import shared_task
 from django.conf import settings
@@ -17,22 +16,22 @@ def send_msg(subject, body):
     for waiver in Waiver.objects.all():
         if DEBUG and "kazanski" not in waiver.email:
             continue
-        if waiver.sent and waiver.sent > pytz.utc.localize(datetime.utcnow() - timedelta(days=6)):
+
+        hash = waiver.re_hash()
+
+        if waiver.confirmed:
             continue
-        #waiver.re_hash()
-        msg = make_msg(body, waiver.hash)
+
+        msg = make_msg(body, hash)
         try:
             sent = send_mail(subject, msg, settings.EMAIL_HOST_USER,
-                             ['kazanski.zachary@gmail.com', '8133893559@tmomail.net'], fail_silently=False)
-        # Rather catch all errors and send out most emails than have it break.
-        # Otherwise don't do this.
+                             [waiver.email, waiver.number], fail_silently=False)
         except:
             continue
         else:
             if sent:
-		pass
-                #waiver.sent = datetime.now()
-                #waiver.save()
+                waiver.sent = datetime.now()
+                waiver.save()
 
 
 def make_msg(body, hash):

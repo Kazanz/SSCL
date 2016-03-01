@@ -21,7 +21,6 @@ class WaiverAdmin(admin.ModelAdmin):
         'phone',
         'carrier',
         'dob',
-        'football',
         'signature',
     )
 
@@ -34,7 +33,6 @@ class WaiverAdmin(admin.ModelAdmin):
         'phone',
         'carrier',
         'dob',
-        'football',
         'signature',
         'created',
     )

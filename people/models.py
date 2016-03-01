@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
+import pytz
 import re
+from datetime import datetime, timedelta
 
 from django.db import models
 
@@ -24,7 +26,6 @@ class Waiver(models.Model):
     phone = models.CharField(max_length=16)
     carrier = models.CharField(max_length=40, choices=CARRIERS)
     dob = models.DateField()
-    football = models.BooleanField(default=False)
     signature = models.CharField(max_length=40)
     confirmed = models.BooleanField(default=False, blank=True)
     sent = models.DateTimeField(blank=True, null=True)
@@ -38,8 +39,11 @@ class Waiver(models.Model):
         super(Waiver, self).save(*args, **kwargs)
 
     def re_hash(self):
-        self.hash = unique_hash(Waiver, 'hash')
-        self.confirmed = False
+        three_days_ago = pytz.utc.localize(datetime.utcnow() - timedelta(days=3))
+        if not self.sent or self.sent < three_days_ago:
+            self.hash = unique_hash(Waiver, 'hash')
+            self.confirmed = False
+        return self.hash
 
     def confirm(self):
         self.hash = None
