@@ -3,8 +3,8 @@
 {% block title %}SSCL Waiver{% endblock %}
 
 {% block info %}
-      <h4>WAIVER OF LIABILITY AND HOLD HARMLESS AGREEMENT</h4>
-        <div style="font-size: 9px; color: grey;">
+      <h4 style="margin-top:0px;">WAIVER OF LIABILITY AND HOLD HARMLESS AGREEMENT</h4>
+      <div style="font-size: 9px; color: grey;">
         <p>1. I acknowledge that I have voluntarily agreed to participate in the “Weekly Wednesday Night Basketball Activity”, (“Activity”). I hereby release, waive, discharge and covenant not to sue Cambridge Christian School or Steve Richardson, its officers, servants, agents and employees (hereinafter referred to as "Hosts") from any and all liability, claims, demands, actions and causes of action whatsoever arising out of or relating to any loss, damage or injury, including death, that may be sustained by me, or to any property belonging to me, whether caused by the negligence of the Hosts, or otherwise, while participating in the Activity, or while in, on or upon the premises where the Activity is being conducted, while in transit to or from the premises, or in any place or places connected with the Activity.</p>
         <p>2. I am fully aware of risks and hazards connected with being on the premises and participating in the Activity, and I am fully aware that there may be risks and hazards unknown to me connected with being on the premises and participating in the Activity, and I hereby elect to voluntarily participate in the Activity, to enter upon the above named premises (6101 N Habana Ave, Tampa, FL 33614) and engage in activities knowing that conditions may be hazardous, or may become hazardous or dangerous to me and my property. I voluntarily assume full responsibility for any risks of loss, property damage or personal injury, including death, that may be sustained by me, or any loss or damage to property owned by me, as a result of my being a participant in the Activity, whether caused by the negligence of Hosts or otherwise.</p>
         <p>3. I further hereby agree to indemnify and save and hold harmless the Hosts and each of them, from any loss, liability, damage or costs they may incur due to my participation in the Activity, whether caused by the negligence of any or all of the Hosts, or otherwise.</p>
@@ -16,7 +16,7 @@
         <p>D. I execute this Release for full, adequate and complete consideration fully intending to be bound by same.</p>
         <p><b>I HAVE CAREFULLY READ THIS AGREEMENT AND FULLY UNDERSTAND ITS CONTENTS. I AM AWARE THAT THIS IS A RELEASE OF LIABILITY AND A CONTRACT BETWEEN MYSELF AND HOST(S) OF THIS ACTIVITY AND SIGN IT OF MY OWN FREE WILL.</b></p>
       </div>
-      <form method="POST" action="{% url 'waiver' %}">{% csrf_token %}
+      <form style="font-size: 12px;" method="POST" action="{% url 'waiver' %}">{% csrf_token %}
         {% for field in form %}
             <div class="form-group">
               <label for="{{ field.label }}">{{ field.label }}</label>
