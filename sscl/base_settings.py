@@ -140,7 +140,7 @@ EMAIL_HOST_PASSWORD = ''
 BROKER_URL = 'django://'
 CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 
-BASE_URL = "http://162.243.194.29"
+BASE_URL = "http://sscl.info"
 
 import djcelery
 djcelery.setup_loader()
