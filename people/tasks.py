@@ -24,14 +24,12 @@ def send_msg(subject, body):
 
         msg = make_msg(body, hash)
         try:
-            sent = send_mail(subject, msg, settings.EMAIL_HOST_USER,
-                             [waiver.email, waiver.number], fail_silently=False)
+            send_mail(subject, msg, settings.EMAIL_HOST_USER, [waiver.email, waiver.number], fail_silently=False)
         except:
             continue
         else:
-            if sent:
-                waiver.sent = datetime.now()
-                waiver.save()
+            waiver.sent = datetime.now()
+            waiver.save()
 
 
 def make_msg(body, hash):
