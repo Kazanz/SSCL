@@ -13,23 +13,29 @@ BASE_URL = settings.BASE_URL
 
 @shared_task
 def send_msg(subject, body):
-    for waiver in Waiver.objects.all():
-        if DEBUG and "kazanski" not in waiver.email:
-            continue
-
-        hash = waiver.re_hash()
-
-        if waiver.confirmed:
-            continue
-
-        msg = make_msg(body, hash)
+    with open('celerylog.txt', 'a') as f:
         try:
-            send_mail(subject, msg, settings.EMAIL_HOST_USER, [waiver.email, waiver.number], fail_silently=False)
-        except:
-            continue
-        else:
-            waiver.sent = datetime.now()
-            waiver.save()
+            for waiver in Waiver.objects.all():
+                if DEBUG and "kazanski" not in waiver.email:
+                    continue
+
+                hash = waiver.re_hash()
+
+                if waiver.confirmed:
+                    continue
+
+                msg = make_msg(body, hash)
+                try:
+                    send_mail(subject, msg, settings.EMAIL_HOST_USER, [waiver.email, waiver.number], fail_silently=False)
+                except:
+                    continue
+                else:
+                    waiver.sent = datetime.now()
+                    waiver.save()
+
+                f.write("{} {} {} {}".format(hash, waiver.email, waiver.number, waiver.sent))
+        except Exception as e:
+		f.write(str(e))
 
 
 def make_msg(body, hash):
