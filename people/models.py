@@ -102,6 +102,7 @@ class Waiver(models.Model):
         if not self.sent or self.sent < three_days_ago:
             self.hash = unique_hash(Waiver, 'hash')
             self.confirmed = False
+            self.save()
         return self.hash
 
     def confirm(self):

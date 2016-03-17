@@ -6,11 +6,5 @@
       <center style="margin-bottom:20px;" >
         <h1>Thank You</h1>
         <a href="{% url 'waiver' %}">Submit a waiver.</a>
-        {% if confirmed %}
-        <h3>Confirmed</h3>
-        {% endif %}
-        {% for person in confirmed %}
-        {{ person.first }} {{ person.last }}<br>
-        {% endfor %}
       </center>
 {% endblock %}
