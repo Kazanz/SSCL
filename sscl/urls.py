@@ -21,6 +21,7 @@ from sscl import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^clear/', views.clear, {}, 'clear'),
     url(r'^thank-you/', people_views.thank_you, {}, 'thank-you'),
     url(r'^confirm/(?P<hash>.*)/', views.confirm, {}, 'confirm'),
     url(r'^send/', views.send_emails, {}, 'send'),

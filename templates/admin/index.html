@@ -122,7 +122,8 @@
 {% block sidebar %}
 <div id="content-related">
     <div class="module" id="recent-actions-module">
-        <h2>{% trans 'Confirmed' %}</h2>
+        <h2 style="display: inline-block">{% trans 'Confirmed' %}</h2>
+        <a style="padding: 20px; display: inline-block; float:right;" href="{% url 'clear' %}">Clear</a>
         <ul class="actionlist">
             {% for person in confirmed %}
             <li>

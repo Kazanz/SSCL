@@ -94,19 +94,12 @@ class Waiver(models.Model):
         return self.first + " " + self.last
 
     def save(self, *args, **kwargs):
+        if not self.hash:
+            self.hash = unique_hash(Waiver, 'hash')
         self.phone = re.sub("\D", "", self.phone)
         super(Waiver, self).save(*args, **kwargs)
 
-    def re_hash(self):
-        three_days_ago = pytz.utc.localize(datetime.utcnow() - timedelta(days=3))
-        if not self.sent or self.sent < three_days_ago:
-            self.hash = unique_hash(Waiver, 'hash')
-            self.confirmed = False
-            self.save()
-        return self.hash
-
     def confirm(self):
-        self.hash = None
         self.confirmed = True
         self.save()
 

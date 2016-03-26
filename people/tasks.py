@@ -1,8 +1,8 @@
 from datetime import datetime
 
+import requests
 from celery import shared_task
 from django.conf import settings
-from django.core.mail import send_mail
 
 from people.models import Waiver
 
@@ -13,29 +13,12 @@ BASE_URL = settings.BASE_URL
 
 @shared_task
 def send_msg(subject, body):
-    with open('celerylog.txt', 'a') as f:
-        try:
-            for waiver in Waiver.objects.all():
-                if DEBUG and "kazanski" not in waiver.email:
-                    continue
-
-                hash = waiver.re_hash()
-
-                if waiver.confirmed:
-                    continue
-
-                msg = make_msg(body, hash)
-                try:
-                    send_mail(subject, msg, settings.EMAIL_HOST_USER, [waiver.email, waiver.number], fail_silently=False)
-                except:
-                    continue
-                else:
-                    waiver.sent = datetime.now()
-                    waiver.save()
-
-                f.write("{} {} {} {}".format(hash, waiver.email, waiver.number, waiver.sent))
-        except Exception as e:
-		f.write(str(e))
+    for waiver in Waiver.objects.all():
+        msg = make_msg(body, waiver.hash)
+        send_with_mailgun(waiver.email, subject, msg)
+        send_with_mailgun(waiver.number, subject, msg)
+        waiver.sent = datetime.now()
+        waiver.save()
 
 
 def make_msg(body, hash):
@@ -43,3 +26,13 @@ def make_msg(body, hash):
     formatter = body + "\n\n{}"
     text = formatter.format("Click this link to confirm: {}".format(link))
     return text
+
+
+def send_with_mailgun(to, subject, msg):
+    requests.post(
+        settings.MAIL_GUN_URL,
+        auth=("api", settings.MAIL_GUN_API_KEY),
+        data={"from": "Mailgun Sandbox <postmaster@sandboxd4e1c9825e0843e4b8a071d295448de7.mailgun.org>",
+              "to": to,
+              "subject": subject,
+              "text": msg})

@@ -19,6 +19,11 @@ def send_emails(request):
     return HttpResponse(400)
 
 
+def clear(request):
+    Waiver.objects.all().update(confirmed=False)
+    return redirect('/admin/')
+
+
 def confirm(request, hash):
     waiver = Waiver.objects.filter(hash=hash).first()
     if waiver:
