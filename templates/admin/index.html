@@ -64,6 +64,7 @@
         </tr>
         <tr class="model-1"><td><input name="subject" id="subject" style="width:98%" placeholder="Subject" type="text" /></td></tr>
         <tr class="model-1"><td><textarea name="body" id="body" rows="4" style="width:98%" placeholder="Body"></textarea></td></tr>
+        <tr class="model-1"><td><label><input type="checkbox" name="withlink" id="withlink" checked><span style="margin-left: 10px; cursor:pointer; ">Send with confirmation link</span></label></td></tr>
         <tr class="model-1"><td><input id="send" value="Send" type="submit" /></td></tr>
         <tr style="display:none" class="sending-msg"><td>Your emails are being sent...</td></tr>
         <tr style="display:none" class="complete-msg">
@@ -91,6 +92,7 @@
     e.preventDefault();
     subject = $('#subject').val()
     body = $('#body').val()
+    withlink = $('#withlink')[0].checked
     if(subject === "" || body === "") {
         $('.form-error-msg').show()
     } else {
@@ -98,6 +100,7 @@
         formData = {
             'subject': subject,
             'body': body,
+            'withlink': withlink,
         }
         $('.model-1').hide();
         $('.sending-msg').show()

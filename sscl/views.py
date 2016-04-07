@@ -13,8 +13,9 @@ def send_emails(request):
     if request.user.is_authenticated():
         subject = request.POST.get("subject")
         body = request.POST.get("body")
-        if subject and body:
-            send_msg.delay(subject, body)
+        withlink = request.POST.get("withlink")
+        if subject and body and withlink:
+            send_msg.delay(subject, body, withlink == "true")
             return HttpResponse(200)
     return HttpResponse(400)
 

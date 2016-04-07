@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
 
-import pytz
 import re
-from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.db import models
 
 from people.helpers import unique_hash
@@ -97,6 +96,8 @@ class Waiver(models.Model):
         if not self.hash:
             self.hash = unique_hash(Waiver, 'hash')
         self.phone = re.sub("\D", "", self.phone)
+        if self.pk is None:
+            self.send_new_waiver_email()
         super(Waiver, self).save(*args, **kwargs)
 
     def confirm(self):
@@ -106,3 +107,14 @@ class Waiver(models.Model):
     @property
     def number(self):
         return self.phone + self.carrier
+
+    def send_new_waiver_email(self):
+        from people.tasks import send_with_mailgun
+        to = "kazanski.zachary@gmail.com" if settings.DEBUG else "srichardson@streamsound.com"
+        send_with_mailgun(to, "New Waiver: {} {}".format(self.first, self.last),
+                          self.make_msg())
+
+    def make_msg(self):
+        fields = ('first', 'last', 'email', 'phone', 'carrier', 'dob')
+        return "\n".join(["{}: {}".format(k, getattr(self, k))
+                          for k in fields])

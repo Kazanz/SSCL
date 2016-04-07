@@ -12,9 +12,9 @@ BASE_URL = settings.BASE_URL
 
 
 @shared_task
-def send_msg(subject, body):
+def send_msg(subject, body, withlink=True):
     for waiver in Waiver.objects.all():
-        msg = make_msg(body, waiver.hash)
+        msg = make_msg(body, waiver.hash) if withlink else body
         send_with_mailgun(waiver.email, subject, msg)
         send_with_mailgun(waiver.number, subject, msg)
         waiver.sent = datetime.now()
@@ -32,7 +32,7 @@ def send_with_mailgun(to, subject, msg):
     requests.post(
         settings.MAIL_GUN_URL,
         auth=("api", settings.MAIL_GUN_API_KEY),
-        data={"from": "Mailgun Sandbox <postmaster@sandboxd4e1c9825e0843e4b8a071d295448de7.mailgun.org>",
+        data={"from": "Steve Richardson <mailgun@sscl.info>",
               "to": to,
               "subject": subject,
               "text": msg})
