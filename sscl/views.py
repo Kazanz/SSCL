@@ -30,3 +30,10 @@ def confirm(request, hash):
     if waiver:
         waiver.confirm()
     return redirect('thank-you')
+
+
+def cancel(request, hash):
+    waiver = Waiver.objects.filter(hash=hash).first()
+    if waiver:
+        waiver.cancel()
+    return redirect('thank-you')

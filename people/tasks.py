@@ -23,9 +23,10 @@ def send_msg(subject, body, withlink=True):
 
 def make_msg(body, hash):
     link = "{}/confirm/{}/".format(BASE_URL, hash)
-    formatter = body + "\n\n{}"
-    text = formatter.format("Click this link to confirm: {}".format(link))
-    return text
+    yes = link + "yes/"
+    no = link + "no/"
+    links = "Are you coming?\nYes: {}\nNo: {}".format(yes, no)
+    return "{}\n\n{}".format(links, body)
 
 
 def send_with_mailgun(to, subject, msg):

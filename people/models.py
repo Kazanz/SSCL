@@ -104,6 +104,10 @@ class Waiver(models.Model):
         self.confirmed = True
         self.save()
 
+    def cancel(self):
+        self.confirmed = False
+        self.save()
+
     @property
     def number(self):
         return self.phone + self.carrier

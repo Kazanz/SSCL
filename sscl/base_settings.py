@@ -144,3 +144,6 @@ BASE_URL = "http://sscl.info"
 
 import djcelery
 djcelery.setup_loader()
+
+
+MAIL_GUN_URL = "https://api.mailgun.net/v3/sscl.info/messages"
