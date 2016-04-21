@@ -56,7 +56,10 @@
             <a class="section" title="Announcement">Announcement</a>
           </caption>
           <tr><td><textarea name="editor1" id="editor1" style="height: 100px">{{ announcement.text }}</textarea></tr></td>
-          <tr><td><input id="send" value="Save" type="submit" /></tr></td>
+          <tr><td>
+            <input id="send" value="Save" type="submit" />
+            <a style="margin-top: 10px; float:right;" target="_blank" href="{% url 'confirm' 00000000 %}">View announcement page</a>
+          </tr></td>
           <script>
               CKEDITOR.replace( 'editor1' );
           </script>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}SSCL | Thank You{% endblock %}
+
+{% block info %}
+    {{ announcement.text|safe }}
+    <center><h2>Are you coming?</h2></center>
+    <div class="row">
+        <div class="col-xs-6">
+            <center><a href="{% url 'confirm-yes' hash %}"><button style="width: 70%" class="btn btn-success">YES</button></a></center>
+        </div>
+        <div class="col-xs-6">
+            <center><a href="{% url 'thank-you' %}"><button style="width: 70%"class="btn btn-danger">NO</button></a></center>
+        </div>
+{% endblock %}

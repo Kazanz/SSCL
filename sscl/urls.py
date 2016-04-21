@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^clear/', views.clear, {}, 'clear'),
     url(r'^announcement/', views.announcement, {}, 'announcement'),
     url(r'^thank-you/', people_views.thank_you, {}, 'thank-you'),
+    url(r'^confirm/(?P<hash>.*)/yes', people_views.confirm_yes, {}, 'confirm-yes'),
     url(r'^confirm/(?P<hash>.*)/', people_views.confirm, {}, 'confirm'),
     url(r'^send/', views.send_emails, {}, 'send'),
     url(r'^', people_views.waiver, {}, 'waiver'),
