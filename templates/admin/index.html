@@ -48,6 +48,23 @@
 {% else %}
     <p>{% trans "You don't have permission to edit anything." %}</p>
 {% endif %}
+    <div class="announcement module">
+        <form id="announcement-form" method="POST" action="{% url 'announcement' %}">
+          {% csrf_token %}
+          <table style="width:100%">
+          <caption>
+            <a class="section" title="Announcement">Announcement</a>
+          </caption>
+          <tr><td><textarea name="editor1" id="editor1" style="height: 100px">{{ announcement.text }}</textarea></tr></td>
+          <tr><td><input id="send" value="Save" type="submit" /></tr></td>
+          <script>
+              CKEDITOR.replace( 'editor1' );
+          </script>
+          </table>
+        </form>
+    </div>
+
+
     <div class="app-send module">
       <form id="send-form" method="POST">
         {% csrf_token %}
@@ -62,7 +79,7 @@
                 </ul>
             </td>
         </tr>
-        <tr class="model-1"><td><input name="subject" id="subject" style="width:98%" placeholder="Subject" type="text" /></td></tr>
+        <tr class="model-1"><td><input name="subject" id="subject" rows="10" columns="80"  placeholder="Subject" type="text" /></td></tr>
         <tr class="model-1"><td><textarea name="body" id="body" rows="4" style="width:98%" placeholder="Body"></textarea></td></tr>
         <tr class="model-1"><td><label><input type="checkbox" name="withlink" id="withlink" checked><span style="margin-left: 10px; cursor:pointer; ">Send with confirmation link</span></label></td></tr>
         <tr class="model-1"><td><input id="send" value="Send" type="submit" /></td></tr>
@@ -84,7 +101,6 @@
         </table>
       </form>
     </div>
-
 </div>
 
 <script>

@@ -1,9 +1,10 @@
+from django.contrib import messages
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 
-from people.models import Waiver
+from people.models import Announcement, Waiver
 from people.tasks import send_msg
 
 
@@ -25,15 +26,17 @@ def clear(request):
     return redirect('/admin/')
 
 
-def confirm(request, hash):
-    waiver = Waiver.objects.filter(hash=hash).first()
-    if waiver:
-        waiver.confirm()
-    return redirect('thank-you')
-
-
-def cancel(request, hash):
-    waiver = Waiver.objects.filter(hash=hash).first()
-    if waiver:
-        waiver.cancel()
-    return redirect('thank-you')
+@require_http_methods(['POST'])
+def announcement(request):
+    type_ = "error"
+    msg = "An error occured!"
+    if request.user.is_authenticated():
+        text = request.POST.get("editor1")
+        if text:
+            announcement = Announcement.objects.get(title="main")
+            announcement.text = text
+            announcement.save()
+            type_ = "success"
+            msg = "Announcement successfully updated!"
+    getattr(messages, type_)(request, msg)
+    return redirect("/admin/")

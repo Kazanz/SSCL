@@ -8,6 +8,14 @@ from django.db import models
 from people.helpers import unique_hash
 
 
+class Announcement(models.Model):
+    title = models.CharField(max_length=255, default="main", unique=True)
+    text = models.TextField()
+
+    def __unicode__(self):
+        return self.title
+
+
 class Waiver(models.Model):
     CARRIERS = (
         ("@sms.3rivers.net", "3 River Wireless"),
