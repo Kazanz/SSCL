@@ -1,7 +1,14 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
+<style>
+.stat-name {
+    font-weight: bold;
+}
+</style>
+
+{% endblock %}
 
 {% block coltype %}colMS{% endblock %}
 
@@ -48,6 +55,24 @@
 {% else %}
     <p>{% trans "You don't have permission to edit anything." %}</p>
 {% endif %}
+    <div class="stats module">
+      <form>
+        <table style="width:100%">
+            <caption>Stats since: <b>{{ stats.start }}</b></caption>
+            <tr>
+                <td class="stat-name">Delivered</td>
+                <td>{{ stats.stats.1.delivered.total }}</td>
+                <td class="stat-name">Opened</td>
+                <td>{{ stats.stats.1.opened.total }}</td>
+                <td class="stat-name">Clicked Link</td>
+                <td>{{ stats.stats.1.clicked.total }}</td>
+                <td class="stat-name">Confirmed</td>
+                <td>{{ confirmed|length }}</td>
+            </tr>
+        </table>
+      </form>
+    </div>
+
     <div class="announcement module">
         <form id="announcement-form" method="POST" action="{% url 'announcement' %}">
           {% csrf_token %}
