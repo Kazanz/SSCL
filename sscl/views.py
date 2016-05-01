@@ -60,5 +60,5 @@ def waiver_data(request):
             'name': w.full_name,
             'confirmed': w.confirmed,
             'image': w.image
-        } for w in Waiver.objects.all()
+        } for w in Waiver.objects.order_by('first')
     ]))
