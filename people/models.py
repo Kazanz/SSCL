@@ -111,7 +111,7 @@ class Waiver(models.Model):
 
     @property
     def full_name(self):
-        return "{} {}".format(self.first, self.last)
+        return "{} {}".format(self.first, self.last).title()
 
     def confirm(self):
         self.confirmed = True
