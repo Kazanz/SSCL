@@ -1,8 +1,10 @@
+import json
+
 from django.contrib import messages
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 
 from people.models import Announcement, Waiver
 from people.tasks import send_msg
@@ -40,3 +42,23 @@ def announcement(request):
             msg = "Announcement successfully updated!"
     getattr(messages, type_)(request, msg)
     return redirect("/admin/")
+
+
+@require_http_methods(['POST'])
+@csrf_exempt
+def image_update(request):
+    waiver = get_object_or_404(Waiver, pk=int(request.POST.get('pk')))
+    waiver.image = request.POST.get('image')
+    waiver.save()
+    return HttpResponse("Success!")
+
+
+def waiver_data(request):
+    return HttpResponse(json.dumps([
+        {
+            'pk': w.pk,
+            'name': w.full_name,
+            'confirmed': w.confirmed,
+            'image': w.image
+        } for w in Waiver.objects.all()
+    ]))

@@ -85,6 +85,7 @@ class Waiver(models.Model):
         ("@cellularonewest.com", "Western Wireless"),
     )
 
+    image = models.CharField(max_length=999999, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     first = models.CharField(max_length=40)
     last = models.CharField(max_length=40)
@@ -107,6 +108,10 @@ class Waiver(models.Model):
         if self.pk is None:
             self.send_new_waiver_email()
         super(Waiver, self).save(*args, **kwargs)
+
+    @property
+    def full_name(self):
+        return "{} {}".format(self.first, self.last)
 
     def confirm(self):
         self.confirmed = True
