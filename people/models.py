@@ -135,3 +135,9 @@ class Waiver(models.Model):
         fields = ('first', 'last', 'email', 'phone', 'carrier', 'dob')
         return "\n".join(["{}: {}".format(k, getattr(self, k))
                           for k in fields])
+
+    def photo(self):
+        if self.image:
+            return '<img height="40" src="data:image/png;base64,{}"/>'.format(self.image)
+        return "Edit"
+    photo.allow_tags = True
