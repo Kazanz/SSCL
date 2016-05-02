@@ -13,9 +13,9 @@ class WaiverAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'photo',
         'first',
         'last',
+        'photo',
         'email',
         'phone',
         'carrier',

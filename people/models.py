@@ -138,6 +138,8 @@ class Waiver(models.Model):
 
     def photo(self):
         if self.image:
-            return '<img height="40" src="data:image/png;base64,{}"/>'.format(self.image)
-        return "Edit"
+            return '<img height="40"' \
+                   'onMouseOver="this.style.height=\'175px\'"' \
+                   'onMouseOut="this.style.height=\'40px\'"' \
+                   'src="data:image/png;base64,{}"/>'.format(self.image)
     photo.allow_tags = True
