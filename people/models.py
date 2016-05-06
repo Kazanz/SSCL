@@ -68,7 +68,6 @@ class Waiver(models.Model):
         ("@txt.bell.ca", "Solo Mobile"),
         ("@email.swbw.com", "Southwestern Bell"),
         ("@messaging.sprintpcs.com", "Sprint"),
-        ("@messaging.sprintpcs.com", "Sprint"),
         ("@tms.suncom.com", "Sumcom"),
         ("@mobile.surewest.com", "Surewest Communicaitons"),
         ("@tmomail.net", "T-Mobile"),

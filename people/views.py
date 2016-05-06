@@ -24,4 +24,8 @@ def confirm(request, hash):
 def confirm_yes(request, hash):
     waiver = get_object_or_404(Waiver, hash=hash)
     waiver.confirm()
-    return redirect("/thank-you/")
+    return render(request, 'thank_you.html', {})
+
+
+def confirm_no(request, hash):
+    return render(request, 'thank_you_no.html', {})

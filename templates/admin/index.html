@@ -24,9 +24,6 @@
       {% if app.app_label == "people" %}
         <div class="app-{{ app.app_label }} module">
         <table>
-        <caption>
-            <a href="{{ app.app_url }}" class="section" title="{% blocktrans with name=app.name %}Models in the {{ name }} application{% endblocktrans %}">{{ app.name }}</a>
-        </caption>
         {% for model in app.models %}
             <tr class="model-{{ model.object_name|lower }}">
             {% if model.admin_url %}
@@ -55,24 +52,6 @@
 {% else %}
     <p>{% trans "You don't have permission to edit anything." %}</p>
 {% endif %}
-    <div class="stats module">
-      <form>
-        <table style="width:100%">
-            <caption>Stats since: <b>{{ stats.start }}</b></caption>
-            <tr>
-                <td class="stat-name">Delivered</td>
-                <td>{{ stats.stats.1.delivered.total }}</td>
-                <td class="stat-name">Opened</td>
-                <td>{{ stats.stats.1.opened.total }}</td>
-                <td class="stat-name">Clicked Link</td>
-                <td>{{ stats.stats.1.clicked.total }}</td>
-                <td class="stat-name">Confirmed</td>
-                <td>{{ confirmed|length }}</td>
-            </tr>
-        </table>
-      </form>
-    </div>
-
     <div class="announcement module">
         <form id="announcement-form" method="POST" action="{% url 'announcement' %}">
           {% csrf_token %}
