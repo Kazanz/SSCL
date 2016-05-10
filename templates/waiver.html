@@ -47,5 +47,9 @@ $('#id_phone').on('keypress', function(ev) {
         }
     }
 });
+
+if ( $('[type="date"]').prop('type') != 'date' ) {
+    $('#id_dob').datepicker({dateFormat: 'yy-mm-dd'});
+};
 </script>
 {% endblock %}
