@@ -24,7 +24,7 @@ def confirm(request, hash):
 
 
 def msg(request):
-    return render(request, 'announcement.html', {'hash': ''})
+    return render(request, 'announcement.html', {'hash': None})
 
 
 def confirm_yes(request, hash):

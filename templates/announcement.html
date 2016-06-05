@@ -4,6 +4,7 @@
 
 {% block info %}
     {{ announcement.text|safe }}
+    {% if hash %}
     <center><h2>Are you coming?</h2></center>
     <div class="row">
         <div class="col-xs-6">
@@ -12,4 +13,5 @@
         <div class="col-xs-6">
             <center><a href="{% url 'confirm-no' hash %}"><button style="width: 70%"class="btn btn-danger">NO</button></a></center>
         </div>
+    {% endif %}
 {% endblock %}
