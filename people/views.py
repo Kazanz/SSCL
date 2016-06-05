@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 from people.forms import WaiverForm
-from people.models import Waiver
+from people.models import MessageTracker, Waiver
 
 
 def waiver(request):
@@ -18,14 +18,23 @@ def thank_you(request):
 
 
 def confirm(request, hash):
+    waiver = get_object_or_404(Waiver, hash=hash)
+    MessageTracker.viewed(waiver)
     return render(request, 'announcement.html', {'hash': hash})
+
+
+def msg(request):
+    return render(request, 'announcement.html', {'hash': ''})
 
 
 def confirm_yes(request, hash):
     waiver = get_object_or_404(Waiver, hash=hash)
     waiver.confirm()
+    MessageTracker.yes(waiver)
     return render(request, 'thank_you.html', {})
 
 
 def confirm_no(request, hash):
+    waiver = get_object_or_404(Waiver, hash=hash)
+    MessageTracker.no(waiver)
     return render(request, 'thank_you_no.html', {})

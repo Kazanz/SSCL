@@ -23,7 +23,7 @@ def send_msg(subject, body, withlink=True):
 
 def make_msg(body, hash):
     link = "{}/confirm/{}/".format(BASE_URL, hash)
-    return "{}\nClick here for info: {}".format(body, link)
+    return "{}\n{}".format(body, link)
 
 
 def send_with_mailgun(to, subject, msg):

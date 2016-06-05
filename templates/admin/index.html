@@ -147,6 +147,12 @@
 
 {% block sidebar %}
 <div id="content-related">
+    <div style="background-color: white;">
+        <p style="display:inline-block">Viewed: {{ tracker.view_count }}</p>
+        <p style="display:inline-block">Yes: {{ tracker.yes_count }}</p>
+        <p style="display:inline-block">No: {{ tracker.no_count }}</p>
+    </div>
+    <hr>
     <div class="module" id="recent-actions-module">
         <h2 style="display: inline-block">{% trans 'Confirmed' %}</h2>
         <a style="padding: 20px; display: inline-block; float:right;" href="{% url 'clear' %}">Clear</a>

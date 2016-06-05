@@ -4,6 +4,7 @@ import re
 
 from django.conf import settings
 from django.db import models
+from jsonfield import JSONField
 
 from people.helpers import unique_hash
 
@@ -14,6 +15,61 @@ class Announcement(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class MessageTracker(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    data = JSONField(default={"viewed": [], "yes": [], "no": []})
+
+    def __unicode__(self):
+        return str(self.date)
+
+    @property
+    def view_count(self):
+        return len(self.data['viewed'])
+
+    @property
+    def yes_count(self):
+        return len(self.data['yes'])
+
+    @property
+    def no_count(self):
+        return len(self.data['no'])
+
+    @property
+    def has_data(self):
+        return self.data['viewed'] and self.data['yes'] and self.data['no']
+
+    @staticmethod
+    def current_tracker():
+        return MessageTracker.objects.latest('date')
+
+    @staticmethod
+    def viewed(waiver):
+        tracker = MessageTracker.current_tracker()
+        if waiver and waiver.pk not in tracker.data['viewed']:
+            MessageTracker.add_to_data('viewed', waiver.pk, tracker)
+
+    @staticmethod
+    def yes(waiver):
+        tracker = MessageTracker.current_tracker()
+        if waiver and waiver.pk not in tracker.data['yes']:
+            MessageTracker.add_to_data('yes', waiver.pk, tracker)
+
+    @staticmethod
+    def no(waiver):
+        tracker = MessageTracker.current_tracker()
+        if waiver and waiver.pk not in tracker.data['no']:
+            MessageTracker.add_to_data('no', waiver.pk, tracker)
+
+    @staticmethod
+    def add_to_data(key, value, tracker):
+        data = tracker.data
+        data_list = data[key]
+        data_list.append(value)
+        data[key] = data_list
+        tracker.data = data
+        tracker.save()
 
 
 class Waiver(models.Model):

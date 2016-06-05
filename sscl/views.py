@@ -1,13 +1,13 @@
 import json
+from datetime import datetime
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import redirect, get_object_or_404
 
-from people.models import Announcement, Waiver
+from people.models import Announcement, MessageTracker, Waiver
 from people.tasks import send_msg
 
 
@@ -26,6 +26,12 @@ def send_emails(request):
 
 def clear(request):
     Waiver.objects.all().update(confirmed=False)
+    tracker = MessageTracker.objects.order_by('-date').first()
+    if not tracker or tracker.has_data:
+        MessageTracker.objects.create()
+    elif tracker:
+        tracker.date = datetime.now()
+        tracker.save()
     return redirect('/admin/')
 
 
