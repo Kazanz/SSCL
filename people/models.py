@@ -21,6 +21,10 @@ class MessageTracker(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     data = JSONField(default={"viewed": [], "yes": [], "no": []})
 
+    class Meta:
+        verbose_name = 'Message Confirmation'
+        verbose_name_plural = 'Message Confirmations'
+
     def __unicode__(self):
         return str(self.date)
 
