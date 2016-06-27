@@ -118,7 +118,7 @@
     body = $('#body').val()
     txtbody = $('#txtbody').val()
     withlink = $('#withlink')[0].checked
-    if(subject === "" || body === "") {
+    if(subject === "" || (body === "" && txtbody === "")) {
         $('.form-error-msg').show()
     } else {
         $('.form-error-msg').hide()

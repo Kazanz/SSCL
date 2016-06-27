@@ -17,7 +17,7 @@ def send_msg(subject, body=None, txtbody=None, withlink=True):
         if body:
             msg = make_msg(body, waiver.hash) if withlink else body
             send_with_mailgun(waiver.email, subject, msg)
-        if textbody:
+        if txtbody:
             textmsg = make_msg(txtbody, waiver.hash)
             send_with_mailgun(waiver.number, subject, textmsg)
         waiver.sent = datetime.now()
