@@ -12,12 +12,14 @@ BASE_URL = settings.BASE_URL
 
 
 @shared_task
-def send_msg(subject, body, txtbody=None, withlink=True):
+def send_msg(subject, body=None, txtbody=None, withlink=True):
     for waiver in Waiver.objects.all():
-        msg = make_msg(body, waiver.hash) if withlink else body
-        textmsg = make_msg(txtbody, waiver.hash) if txtbody else msg
-        send_with_mailgun(waiver.email, subject, msg)
-        send_with_mailgun(waiver.number, subject, textmsg)
+        if body:
+            msg = make_msg(body, waiver.hash) if withlink else body
+            send_with_mailgun(waiver.email, subject, msg)
+        if textbody:
+            textmsg = make_msg(txtbody, waiver.hash)
+            send_with_mailgun(waiver.number, subject, textmsg)
         waiver.sent = datetime.now()
         waiver.save()
 

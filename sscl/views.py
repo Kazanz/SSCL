@@ -19,7 +19,7 @@ def send_emails(request):
         body = request.POST.get("body")
         txtbody = request.POST.get("txtbody")
         withlink = request.POST.get("withlink")
-        if subject and body and withlink:
+        if subject and withlink and (body or txtbody):
             send_msg.delay(subject, body, txtbody, withlink == "true")
             return HttpResponse(200)
     return HttpResponse(400)
