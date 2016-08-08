@@ -20,10 +20,9 @@ class Announcement(models.Model):
 class MessageTracker(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     data = JSONField(default={"viewed": [], "yes": [], "no": []})
-    email_success = JSONField(default=[])
-    email_errors = JSONField(default=[])
-    txt_success = JSONField(default=[])
-    txt_errors = JSONField(default=[])
+    nexmo_ids = JSONField(default=[])
+    sending_email = models.BooleanField(default=False)
+    sending_text = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Message Confirmation'
@@ -31,6 +30,21 @@ class MessageTracker(models.Model):
 
     def __unicode__(self):
         return str(self.date)
+
+    @property
+    def yes_names(self):
+        return self._names("yes")
+
+    @property
+    def no_names(self):
+        return self._names("no")
+
+    @property
+    def view_names(self):
+        return self._names("viewed")
+
+    def _names(self, field):
+        return [Waiver.objects.get(pk=pk).full_name for pk in self.data[field]]
 
     @property
     def view_count(self):
@@ -78,6 +92,14 @@ class MessageTracker(models.Model):
         data[key] = data_list
         tracker.data = data
         tracker.save()
+
+
+class SendHistory(models.Model):
+    tracker = models.ForeignKey(MessageTracker)
+    email_success = JSONField(default=[])
+    email_errors = JSONField(default=[])
+    txt_success = JSONField(default=[])
+    txt_errors = JSONField(default=[])
 
 
 class Waiver(models.Model):

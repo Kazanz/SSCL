@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from people.forms import WaiverForm
@@ -38,3 +39,15 @@ def confirm_no(request, hash):
     waiver = get_object_or_404(Waiver, hash=hash)
     MessageTracker.no(waiver)
     return render(request, 'thank_you_no.html', {})
+
+
+def sending_email(request):
+    if MessageTracker.objects.order_by('-date').first().sending_email:
+        return HttpResponse("yes")
+    return HttpResponse("no")
+
+
+def sending_text(request):
+    if MessageTracker.objects.order_by('-date').first().sending_text:
+        return HttpResponse("yes")
+    return HttpResponse("no")

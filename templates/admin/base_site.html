@@ -7,10 +7,32 @@
 
 <!-- CKE Editor -->
 <script src="//cdn.ckeditor.com/4.5.8/standard/ckeditor.js"></script>
+
+<style>
+#header {
+    height: 60px;
+}
+#branding h1 {
+    margin-top: 5px;
+}
+.fa-refresh {
+    font-size: 12px !important;
+}
+</style>
 {% endblock %}
 
 {% block branding %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">SSCL Messenger</a></h1>
 {% endblock %}
 
+{% block usertools %}
+<div id="user-tools">
+    Welcome,
+    <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+    <a href="/admin/people/waiver/">Waivers</a> /
+    <a href="{{ site_url }}">View site</a> /
+    <a href="{% url 'admin:password_change' %}">Change password</a> /
+    <a href="{% url 'admin:logout' %}">Log out</a>
+</div>
+{% endblock %}
 {% block nav-global %}{% endblock %}

@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'^confirm/(?P<hash>.*)/yes', people_views.confirm_yes, {}, 'confirm-yes'),
     url(r'^confirm/(?P<hash>.*)/no', people_views.confirm_no, {}, 'confirm-no'),
     url(r'^confirm/(?P<hash>.*)/', people_views.confirm, {}, 'confirm'),
+    url(r'^sending-email/', people_views.sending_email, {}, 'sending-email'),
+    url(r'^sending-text/', people_views.sending_text, {}, 'sending-text'),
     url(r'^send/', views.send_emails, {}, 'send'),
     url(r'^api/image/', views.image_update, {}, 'image'),
     url(r'^api/waivers/', views.waiver_data, {}, 'waiver-data'),

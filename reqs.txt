@@ -11,6 +11,7 @@ decorator==4.0.9
 Django==1.9.2
 django-celery==3.1.17
 django-extensions==1.6.1
+django-memoize==2.0.0
 enum34==1.1.2
 Flask==0.10.1
 Flask-Cors==2.1.2
@@ -27,8 +28,10 @@ ipython==4.1.1
 ipython-genutils==0.1.0
 itsdangerous==0.24
 Jinja2==2.8
+jsonfield==1.0.3
 kombu==3.0.33
 MarkupSafe==0.23
+nexmo==1.2.0
 oauth2client==1.5.2
 path.py==8.1.2
 pexpect==4.0.1
@@ -52,5 +55,3 @@ SQLAlchemy==1.0.11
 traitlets==4.1.0
 uritemplate==0.6
 Werkzeug==0.11.4
-jsonfield==1.0.3
-nexmo==1.2.0

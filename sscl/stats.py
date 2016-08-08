@@ -1,33 +1,42 @@
-import calendar
-from datetime import date
-from datetime import timedelta
-
 import requests
+from datetime import datetime
+
+import nexmo
 from django.conf import settings
+from memoize import memoize
+
+from people.models import MessageTracker
 
 
-def get_stats():
-    url = "https://api.mailgun.net/v3/{}/stats/total".format(
-        settings.MAIL_GUN_DOMAIN)
-    res = requests.get(
-        url, auth=("api", settings.MAIL_GUN_API_KEY),
+@memoize(timeout=60)
+def msg_stats():
+    context = {}
+    context['email_totals'] = email_total_stats()
+    context['text_stats'] = text_stats()
+    return context
+
+
+def email_total_stats():
+    date = MessageTracker.objects.order_by('-date').first().date
+    start = date.strftime('%s')
+    totals = requests.get(
+        settings.MAIL_GUN_TOTAL_STATS_URL,
+        auth=("api", settings.MAIL_GUN_API_KEY),
         params={
-            "event": ["delivered", "opened", "clicked"],
-            "start": last_wednesday(),
-            "end": today(),
-        })
-    data = res.json()
-    data['start'] = data['start'][:-13]
-    return data
+            "event": ["accepted", "delivered", "failed"],
+            "start": start,
+            "end": datetime.now().strftime('%s')}
+    ).json()
+    totals['stats'].reverse()
+    return totals['stats']
 
 
-def last_wednesday():
-    today = date.today()
-    offset = (today.weekday() - 2) % 7 or 7
-    last_wednesday = today - timedelta(days=offset)
-    return calendar.timegm(last_wednesday.timetuple())
-
-
-def today():
-    today = date.today()
-    return calendar.timegm(today.timetuple())
+def text_stats():
+    client = nexmo.Client(key=settings.NEXMO_KEY, secret=settings.NEXMO_SECRET)
+    ids = MessageTracker.objects.order_by('-date').first().nexmo_ids
+    stats = []
+    for msg_id in ids:
+        stat = client.get_message(msg_id)
+        stat['date'] = stat['date-received']
+        stats.append(stat)
+    return stats

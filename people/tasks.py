@@ -6,50 +6,59 @@ import requests
 from celery import shared_task
 from django.conf import settings
 
-from people.models import Waiver, MessageTracker
+from people.models import Waiver, MessageTracker, SendHistory
 
 
 DEBUG = settings.DEBUG
 BASE_URL = settings.BASE_URL
 
 
-def catch_error(f, method, waiver, tracker, *args):
+def catch_error(f, method, waiver, history, *args):
     try:
         f(*args)
     except:
         field = method + "_errors"
-        error = getattr(tracker, field)
+        error = getattr(history, field)
         error.append(waiver.full_name)
-        setattr(tracker, field, error)
-        tracker.save()
+        setattr(history, field, error)
+        history.save()
     else:
         field = method + "_success"
-        success = getattr(tracker, field)
+        success = getattr(history, field)
         success.append(waiver.full_name)
-        setattr(tracker, field, success)
-        tracker.save()
+        setattr(history, field, success)
+        history.save()
 
 
 @shared_task
-def send_msg(subject, body=None, txtbody=None, withlink=True):
+def send_msg(self, subject, body=None, txtbody=None, withlink=True):
     tracker = MessageTracker.objects.order_by('-date').first()
-    tracker.sending = True
+    if body:
+        tracker.sending_email = True
+    if txtbody:
+        tracker.sending_text = True
     tracker.save()
+
+    history = SendHistory.objects.create(tracker=tracker)
 
     for waiver in Waiver.objects.all():
         if body:
             msg = make_msg(body, waiver.hash) if withlink else body
-            catch_error(send_with_mailgun, 'email', waiver, tracker,
+            catch_error(send_with_mailgun, 'email', waiver, history,
                         waiver.email, subject, msg)
         if txtbody:
+            print("SENGIN TEXXTTTTTTTTTTTTTTTTTTTT")
             textmsg = make_msg(txtbody, waiver.hash)
-            catch_error(send_with_nexmo, 'txt', waiver, tracker,
-                        waiver.phone, subject, textmsg)
+            catch_error(send_with_nexmo, 'txt', waiver, history,
+                        waiver.phone, textmsg, tracker)
         waiver.sent = datetime.now()
         waiver.save()
         sleep(2)
 
-    tracker.sending = False
+    if body:
+        tracker.sending_email = False
+    if txtbody:
+        tracker.sending_text = False
     tracker.save()
 
 
@@ -68,12 +77,21 @@ def send_with_mailgun(to, subject, msg):
               "text": msg})
 
 
-def send_with_nexmo(number, subject, msg):
+def send_with_nexmo(number, msg, tracker):
     if settings.DEBUG:
         number = "8133893559"
     client = nexmo.Client(key=settings.NEXMO_KEY, secret=settings.NEXMO_SECRET)
-    client.send_message({
+    res = client.send_message({
         'from': '12013508725',
         'to': "1" + number,
-        'text': "{} - {}".format(subject, msg)
+        'text': msg
     })
+    messages = res.get('messages', [])
+    if len(messages):
+        ids = tracker.nexmo_ids
+        for msg in messages:
+            msg_id = msg.get('message-id')
+            if msg_id:
+                ids.append(msg_id)
+        tracker.nexmo_ids = ids
+        tracker.save()

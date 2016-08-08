@@ -1,12 +1,40 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
+{% block extrastyle %}{{ block.super }}
+<!-- I know this is ghetto. Fix it once proof of concept is approved. -->
 <style>
 .stat-name {
     font-weight: bold;
 }
+.dashboard #content {
+    width: 100%;
+}
+#content > h1 {
+    display: none;
+}
+.collapse .well {
+    padding: 20px; 
+}
+input, textarea {
+    margin-bottom: 10px !important;
+}
+
+button {
+    background: #79aec8;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    color: #fff !important;
+    cursor: pointer;
+}
 </style>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
 
 {% endblock %}
 
@@ -17,156 +45,276 @@
 {% block breadcrumbs %}{% endblock %}
 
 {% block content %}
-<div id="content-main">
+<div class="row">
+    <div class="col-md-8">
+        <button type="button" data-toggle="collapse" data-target="#collapseAnnouncement" aria-expanded="false" aria-controls="collapseExample">
+          Announcement
+        </button>
+        <button type="button" data-toggle="collapse" data-target="#collapseEmail" aria-expanded="false" aria-controls="collapseExample">
+            Send Email <i class="fa fa-refresh fa-spin fa-3x fa-fw sending-email" style="display:{% if tracker.sending_email %}ignore{% else %}none{% endif %}"></i>
+        </button>
+        <button type="button" data-toggle="collapse" data-target="#collapseText" aria-expanded="false" aria-controls="collapseExample">
+          Send Text <i class="fa fa-refresh fa-spin fa-3x fa-fw sending-text" style="display:{% if tracker.sending_text %}ignore{% else %}none{% endif %}"></i>
+        </button>
+        <button type="button" data-toggle="collapse" data-target="#collapseEmailHistory" aria-expanded="false" aria-controls="collapseExample">
+          Email History
+        </button>
+        <button type="button" data-toggle="collapse" data-target="#collapseTextHistory" aria-expanded="false" aria-controls="collapseExample">
+          Text History
+        </button>
 
-{% if app_list %}
-    {% for app in app_list %}
-      {% if app.app_label == "people" %}
-        <div class="app-{{ app.app_label }} module">
-        <table>
-        {% for model in app.models %}
-            <tr class="model-{{ model.object_name|lower }}">
-            {% if model.admin_url %}
-                <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
-            {% else %}
-                <th scope="row">{{ model.name }}</th>
-            {% endif %}
+        <hr>
 
-            {% if model.add_url %}
-                <td><a href="{{ model.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
-            {% else %}
-                <td>&nbsp;</td>
-            {% endif %}
-
-            {% if model.admin_url %}
-                <td><a href="{{ model.admin_url }}" class="changelink">{% trans 'View' %}</a></td>
-            {% else %}
-                <td>&nbsp;</td>
-            {% endif %}
-            </tr>
-        {% endfor %}
-        </table>
+        <div class="collapse in" id="collapseAnnouncement">
+          <div class="well">
+            <form id="announcement-form" method="POST" action="{% url 'announcement' %}">
+              {% csrf_token %}
+              <table style="width:100%">
+              <tr><td><textarea name="editor1" id="editor1" style="height: 100px">{{ announcement.text }}</textarea></tr></td>
+              <tr><td>
+                <input id="send" value="Save" type="submit" />
+                <a style="margin-top: 10px; float:right;" target="_blank" href="{% url 'confirm' %}">View announcement page</a>
+              </tr></td>
+              <script>
+                  CKEDITOR.replace( 'editor1' );
+              </script>
+              </table>
+            </form>
+          </div>
         </div>
-      {% endif %}
-    {% endfor %}
-{% else %}
-    <p>{% trans "You don't have permission to edit anything." %}</p>
-{% endif %}
-    <div class="announcement module">
-        <form id="announcement-form" method="POST" action="{% url 'announcement' %}">
-          {% csrf_token %}
-          <table style="width:100%">
-          <caption>
-            <a class="section" title="Announcement">Announcement</a>
-          </caption>
-          <tr><td><textarea name="editor1" id="editor1" style="height: 100px">{{ announcement.text }}</textarea></tr></td>
-          <tr><td>
-            <input id="send" value="Save" type="submit" />
-            <a style="margin-top: 10px; float:right;" target="_blank" href="{% url 'confirm' 00000000 %}">View announcement page</a>
-          </tr></td>
-          <script>
-              CKEDITOR.replace( 'editor1' );
-          </script>
-          </table>
-        </form>
-    </div>
+
+        <div class="collapse" id="collapseEmail">
+          <div class="well">
+            <div class="app-send">
+              <p class="sending-email" style="display:{% if tracker.sending_email %}ignore{% else %}none{% endif %}">Emails are being sent...</p>
+              <form class="email-form" id="send-form" method="POST">
+                {% csrf_token %}
+                <table style="width:100%">
+                    <tr style="display:none" class="email-form-error-msg">
+                        <td>
+                            <ul class="messagelist">
+                                <li class="error">All fields are required.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr class="model-1"><td><input name="subject" id="subject" rows="10" columns="80"  placeholder="Subject" type="text" /></td></tr>
+                    <tr class="model-1"><td><textarea name="body" id="body" rows="4" style="width:98%" placeholder="Email Message"></textarea></td></tr>
+                    <tr class="model-1"><td><label><input type="checkbox" name="withlink" id="withlink" checked><span style="margin-left: 10px; cursor:pointer; ">Send with confirmation link</span></label></td></tr>
+                    <tr class="model-1"><td><input id="send" value="Send" type="submit" /></td></tr>
+                </table>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapse" id="collapseText">
+          <div class="well">
+            <div class="app-send">
+              <p class="sending-text" style="display:{% if tracker.sending_email %}ignore{% else %}none{% endif %}">Texts are being sent...</p>
+              <form class="text-form" id="send-form" method="POST">
+                {% csrf_token %}
+                <table style="width:100%">
+                    <tr style="display:none" class="text-form-error-msg">
+                        <td>
+                            <ul class="messagelist">
+                                <li class="error">All fields are required.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr class="model-1"><td><textarea name="txtbody" id="txtbody" rows="4" style="width:98%" placeholder="Text Message"></textarea></td></tr>
+                    <tr class="model-1"><td><label><input type="checkbox" name="withlink" id="withlink" checked><span style="margin-left: 10px; cursor:pointer; ">Send with confirmation link</span></label></td></tr>
+                    <tr class="model-1"><td><input id="send" value="Send" type="submit" /></td></tr>
+                </table>
+              </form>
+            </div>
+          </div>
+        </div>
 
 
-    <div class="app-send module">
-      <form id="send-form" method="POST">
-        {% csrf_token %}
-        <table style="width:100%">
-        <caption>
-            <a class="section" title="Send Message">Send Message</a>
-        </caption>
-        <tr style="display:none" class="form-error-msg">
-            <td>
-                <ul class="messagelist">
-                    <li class="error">A subject and a body are required.</li>
-                </ul>
-            </td>
-        </tr>
-        <tr class="model-1"><td><input name="subject" id="subject" rows="10" columns="80"  placeholder="Subject" type="text" /></td></tr>
-        <tr class="model-1"><td><textarea name="body" id="body" rows="4" style="width:98%" placeholder="Email Message"></textarea></td></tr>
-        <tr class="model-1"><td><textarea name="txtbody" id="txtbody" rows="4" style="width:98%" placeholder="Text Message"></textarea></td></tr>
-        <tr class="model-1"><td><label><input type="checkbox" name="withlink" id="withlink" checked><span style="margin-left: 10px; cursor:pointer; ">Send with confirmation link</span></label></td></tr>
-        <tr class="model-1"><td><input id="send" value="Send" type="submit" /></td></tr>
-        <tr style="display:none" class="sending-msg"><td>Your emails are being sent...</td></tr>
-        <tr style="display:none" class="complete-msg">
-            <td>
-                <ul class="messagelist">
-                    <li class="success">Your messages are being sent! You can check to waiver page for progess.</li>
-                </ul>
-            </td>
-        </tr>
-        <tr style="display:none" class="error-msg">
-            <td>
-                <ul class="messagelist">
-                    <li class="error">An error occured! Some emails may not have been sent.</li>
-                </ul>
-            </td>
-        </tr>
-        </table>
-      </form>
+        <div class="collapse" id="collapseEmailHistory">
+            <div class="well">
+                <div>
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Totals</a></li>
+                  </ul>
+                
+                  <!-- Tab panes -->
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <h3>Since: {{ filter_date }}</h3>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Date</th>
+                                <th>Accepted</th>
+                                <th>Delivered</th>
+                                <th>Failed</th>
+                            </tr>
+                            {% for stat in email_totals %}
+                            <tr>
+                                <td>{{ stat.time }}</td>
+                                <td>{{ stat.accepted.total }}</td>
+                                <td>{{ stat.delivered.total }}</td>
+                                <td>{{ stat.failed.permanent.total }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse" id="collapseTextHistory">
+            <div class="well">
+                <div>
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Texts</a></li>
+                  </ul>
+                
+                  <!-- Tab panes -->
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <h3>Since: {{ filter_date }}</h3>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Date</th>
+                                <th>Number</th>
+                                <th>Status</th>
+                            </tr>
+                            {% for stat in text_stats %}
+                            <tr>
+                                <td>{{ stat.date }}</td>
+                                <td>{{ stat.to }}</td>
+                                <td>{{ stat.status }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="col-md-4">
+        <a style="float:right;" href="{% url 'clear' %}"><button>Clear</button></a>
+      <div>
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#yes" aria-controls="yes" role="tab" data-toggle="tab">Yes <span class="badge">{{ tracker.yes_count }}</span></a></li>
+          <li role="presentation"><a href="#no" aria-controls="no" role="tab" data-toggle="tab">No <span class="badge">{{ tracker.no_count }}</span></a></li>
+          <li role="presentation"><a href="#view" aria-controls="view" role="tab" data-toggle="tab">Viewed <span class="badge">{{ tracker.view_count }}</span></a></li>
+        </ul>
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="yes">
+               <p style="margin: 10px;">Since: {{ filter_date }}</p>
+               <table class="table table-striped">
+                   {% for person in tracker.yes_names %}
+                   <tr>
+                       <td>{{ person }}</td>
+                   </tr>
+                   {% endfor %}
+               </table>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="no">
+               <p style="margin: 10px;">Since: {{ filter_date }}</p>
+               <table class="table table-striped">
+                   {% for person in tracker.no_names %}
+                   <tr>
+                       <td>{{ person }}</td>
+                   </tr>
+                   {% endfor %}
+               </table>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="viewed">
+               <p style="margin: 10px;">Since: {{ filter_date }}</p>
+               <table class="table table-striped">
+                   {% for person in tracker.view_names %}
+                   <tr>
+                       <td>{{ person }}</td>
+                   </tr>
+                   {% endfor %}
+               </table>
+              </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
- $('#send-form').on('submit', function(e){
+function sendMessage(subject, body, txtbody, withlink) {
+    formData = {
+        'subject': subject,
+        'body': body,
+        'txtbody': txtbody,
+        'withlink': withlink,
+    }
+    $('.model-1').hide();
+    $('.sending-msg').show()
+    $.ajax({
+        url : "{% url 'send' %}",
+        type: "POST",
+        data : formData,
+        success: function(data) {
+            location.reload()
+        },
+    });
+}
+
+$(".email-form").on('submit', function(e){
     e.preventDefault();
     subject = $('#subject').val()
     body = $('#body').val()
     txtbody = $('#txtbody').val()
     withlink = $('#withlink')[0].checked
-    if(subject === "" || (body === "" && txtbody === "")) {
-        $('.form-error-msg').show()
+    if(subject === "" || (body === "")) {
+        $('.email-form-error-msg').show()
     } else {
-        $('.form-error-msg').hide()
-        formData = {
-            'subject': subject,
-            'body': body,
-            'txtbody': txtbody,
-            'withlink': withlink,
-        }
-        $('.model-1').hide();
-        $('.sending-msg').show()
-        $.ajax({
-            url : "{% url 'send' %}",
-            type: "POST",
-            data : formData,
-            success: function(data) {
-                $('.complete-msg').show()
-                $('.sending-msg').hide()
-            },
-            error: function (e) {
-                $('.sending-msg').hide()
-                $('.error-msg').show()
-            }
-        });
+        sendMessage(subject, body, txtbody, withlink)
     }
 });
-</script>
-{% endblock %}
 
-{% block sidebar %}
-<div id="content-related">
-    <div style="background-color: white;">
-        <p style="display:inline-block">Viewed: {{ tracker.view_count }}</p>
-        <p style="display:inline-block">Yes: {{ tracker.yes_count }}</p>
-        <p style="display:inline-block">No: {{ tracker.no_count }}</p>
-    </div>
-    <hr>
-    <div class="module" id="recent-actions-module">
-        <h2 style="display: inline-block">{% trans 'Confirmed' %}</h2>
-        <a style="padding: 20px; display: inline-block; float:right;" href="{% url 'clear' %}">Clear</a>
-        <ul class="actionlist">
-            {% for person in confirmed %}
-            <li>
-            <a>{{ person.first }} {{ person.last }}</a>
-                <br/>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
+$(".text-form").on('submit', function(e){
+    e.preventDefault();
+    subject = $('#subject').val()
+    body = $('#body').val()
+    txtbody = $('#txtbody').val()
+    withlink = $('#withlink')[0].checked
+    if(txtbody === "") {
+        $('.text-form-error-msg').show()
+    } else {
+        sendMessage(subject, body, txtbody, withlink)
+    }
+});
+
+(function pollEmail() {
+   setTimeout(function() {
+      $.ajax({ url: "{% url 'sending-email' %}", success: function(data) {
+           if (data == "yes") {
+               $('.sending-email').show()
+               $('.email-form').hide()
+           } else {
+               $('.sending-email').hide()
+               $('.email-form').show()
+           }
+           }, complete: pollEmail });
+    }, 3000);
+})();
+
+(function pollText() {
+   setTimeout(function() {
+      $.ajax({ url: "{% url 'sending-text' %}", success: function(data) {
+           if (data == "yes") {
+               $('.sending-text').show()
+               $('.text-form').hide()
+           } else {
+               $('.sending-text').hide()
+               $('.text-form').show()
+           }
+           }, complete: pollText });
+    }, 3000);
+})();
+
+
+
+</script>
 {% endblock %}

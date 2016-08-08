@@ -19,9 +19,11 @@ def send_emails(request):
         body = request.POST.get("body")
         txtbody = request.POST.get("txtbody")
         withlink = request.POST.get("withlink")
-        if subject and withlink and (body or txtbody):
+        if withlink and ((body and subject) or txtbody):
             send_msg.delay(subject, body, txtbody, withlink == "true")
+            messages.success(request, "Your messages are being sent.")
             return HttpResponse(200)
+        messages.error(request, "An error occured, please try again.")
     return HttpResponse(400)
 
 
