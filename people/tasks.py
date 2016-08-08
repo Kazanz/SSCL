@@ -36,7 +36,6 @@ def send_msg(subject, body=None, txtbody=None, withlink=True):
     tracker.sending = True
     tracker.save()
 
-    counter = 0
     for waiver in Waiver.objects.all():
         if body:
             msg = make_msg(body, waiver.hash) if withlink else body
@@ -48,11 +47,7 @@ def send_msg(subject, body=None, txtbody=None, withlink=True):
                         waiver.phone, subject, textmsg)
         waiver.sent = datetime.now()
         waiver.save()
-        counter += 1
-        sleep(3)
-        if counter > 30:
-            sleep(10)
-            counter = 0
+        sleep(2)
 
     tracker.sending = False
     tracker.save()
