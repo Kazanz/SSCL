@@ -20,6 +20,10 @@ class Announcement(models.Model):
 class MessageTracker(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     data = JSONField(default={"viewed": [], "yes": [], "no": []})
+    email_success = JSONField(default=[])
+    email_errors = JSONField(default=[])
+    txt_success = JSONField(default=[])
+    txt_errors = JSONField(default=[])
 
     class Meta:
         verbose_name = 'Message Confirmation'
