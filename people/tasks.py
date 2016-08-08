@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import sleep
 
 import nexmo
 import requests
@@ -46,6 +47,7 @@ def send_msg(subject, body=None, txtbody=None, withlink=True):
                         waiver.phone, subject, textmsg)
         waiver.sent = datetime.now()
         waiver.save()
+        sleep(.5)
 
     tracker.sending = False
     tracker.save()
