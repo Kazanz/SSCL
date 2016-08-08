@@ -69,7 +69,6 @@ def send_with_mailgun(to, subject, msg):
 
 
 def send_with_nexmo(number, subject, msg):
-    assert 0
     if settings.DEBUG:
         number = "8133893559"
     client = nexmo.Client(key=settings.NEXMO_KEY, secret=settings.NEXMO_SECRET)
