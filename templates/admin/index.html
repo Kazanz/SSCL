@@ -187,7 +187,7 @@ button {
           <li role="presentation"><a href="#view" aria-controls="view" role="tab" data-toggle="tab">Viewed <span class="badge">{{ tracker.view_count }}</span></a></li>
         </ul>
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane" id="yes">
+          <div role="tabpanel" class="tab-pane active" id="yes">
                <p style="margin: 10px;">Since: {{ filter_date }}</p>
                <table class="table table-striped">
                    {% for person in tracker.yes_names %}
