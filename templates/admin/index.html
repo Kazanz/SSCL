@@ -134,13 +134,6 @@ button {
         <div class="collapse" id="collapseEmailHistory">
             <div class="well">
                 <div>
-                  <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Totals</a></li>
-                  </ul>
-                
-                  <!-- Tab panes -->
-                  <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="home">
                         <h3>Since: {{ filter_date }}</h3>
                         <table class="table table-striped">
                             <tr>
@@ -158,8 +151,6 @@ button {
                             </tr>
                             {% endfor %}
                         </table>
-                    </div>
-                  </div>
                 </div>
             </div>
         </div>
@@ -167,13 +158,6 @@ button {
         <div class="collapse" id="collapseTextHistory">
             <div class="well">
                 <div>
-                  <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Texts</a></li>
-                  </ul>
-                
-                  <!-- Tab panes -->
-                  <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="home">
                         <h3>Since: {{ filter_date }}</h3>
                         <table class="table table-striped">
                             <tr>
@@ -189,8 +173,6 @@ button {
                             </tr>
                             {% endfor %}
                         </table>
-                    </div>
-                  </div>
                 </div>
             </div>
         </div>
@@ -205,7 +187,7 @@ button {
           <li role="presentation"><a href="#view" aria-controls="view" role="tab" data-toggle="tab">Viewed <span class="badge">{{ tracker.view_count }}</span></a></li>
         </ul>
         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="yes">
+          <div role="tabpanel" class="tab-pane" id="yes">
                <p style="margin: 10px;">Since: {{ filter_date }}</p>
                <table class="table table-striped">
                    {% for person in tracker.yes_names %}
@@ -225,7 +207,7 @@ button {
                    {% endfor %}
                </table>
           </div>
-          <div role="tabpanel" class="tab-pane" id="viewed">
+          <div role="tabpanel" class="tab-pane" id="view">
                <p style="margin: 10px;">Since: {{ filter_date }}</p>
                <table class="table table-striped">
                    {% for person in tracker.view_names %}
@@ -234,7 +216,7 @@ button {
                    </tr>
                    {% endfor %}
                </table>
-              </div>
+           </div>
         </div>
     </div>
 
