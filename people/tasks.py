@@ -31,7 +31,7 @@ def catch_error(f, method, waiver, history, *args):
 
 
 @shared_task
-def send_msg(self, subject, body=None, txtbody=None, withlink=True):
+def send_msg(subject, body=None, txtbody=None, withlink=True):
     tracker = MessageTracker.objects.order_by('-date').first()
     if body:
         tracker.sending_email = True
@@ -47,7 +47,6 @@ def send_msg(self, subject, body=None, txtbody=None, withlink=True):
             catch_error(send_with_mailgun, 'email', waiver, history,
                         waiver.email, subject, msg)
         if txtbody:
-            print("SENGIN TEXXTTTTTTTTTTTTTTTTTTTT")
             textmsg = make_msg(txtbody, waiver.hash)
             catch_error(send_with_nexmo, 'txt', waiver, history,
                         waiver.phone, textmsg, tracker)
