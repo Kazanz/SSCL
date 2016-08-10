@@ -12,7 +12,7 @@ from people.models import MessageTracker
 def msg_stats():
     context = {}
     context['email_totals'] = email_total_stats()
-    context['text_stats'] = text_stats()
+    context['text_stats'] = {} #text_stats()
     return context
 
 
