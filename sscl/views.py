@@ -69,8 +69,20 @@ def waiver_data(request):
             'pk': w.pk,
             'name': w.full_name,
             'confirmed': w.confirmed,
+            'view': w.confirmed,
             'image': w.image
         } for w in sorted(
             Waiver.objects.order_by('first'), key=lambda x: x.full_name
         )
     ]))
+
+def tracker_data(request):
+    tracker = MessageTracker.objects.order_by('-pk').first()
+    return HttpResponse(json.dumps(
+        {
+            'pk': tracker.pk,
+            'yes': tracker.yes_names,
+            'no': tracker.no_names,
+            'viewed': tracker.view_names,
+        }
+    ))

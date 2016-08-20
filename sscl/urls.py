@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'^send/', views.send_emails, {}, 'send'),
     url(r'^api/image/', views.image_update, {}, 'image'),
     url(r'^api/waivers/', views.waiver_data, {}, 'waiver-data'),
+    url(r'^api/tracker/', views.tracker_data, {}, 'tracker-data'),
     url(r'^', people_views.waiver, {}, 'waiver'),
 ]
