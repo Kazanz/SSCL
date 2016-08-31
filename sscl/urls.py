@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^confirm/(?P<hash>.*)/', people_views.confirm, {}, 'confirm'),
     url(r'^sending-email/', people_views.sending_email, {}, 'sending-email'),
     url(r'^sending-text/', people_views.sending_text, {}, 'sending-text'),
+    url(r'^unlock/', people_views.unlock, {}, 'unlock'),
     url(r'^send/', views.send_emails, {}, 'send'),
     url(r'^api/image/', views.image_update, {}, 'image'),
     url(r'^api/waivers/', views.waiver_data, {}, 'waiver-data'),

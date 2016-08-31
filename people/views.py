@@ -51,3 +51,11 @@ def sending_text(request):
     if MessageTracker.objects.order_by('-date').first().sending_text:
         return HttpResponse("yes")
     return HttpResponse("no")
+
+
+def unlock(request):
+    tracker = MessageTracker.objects.order_by('-date').first()
+    tracker.sending_email = False
+    tracker.sending_text = False
+    tracker.save()
+    return redirect('/admin/')
