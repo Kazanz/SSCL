@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^clear/', views.clear, {}, 'clear'),
     url(r'^announcement/', views.announcement, {}, 'announcement'),
+    url(r'^callback/', views.callback, {}, 'callback'),
     url(r'^thank-you/', people_views.thank_you, {}, 'thank-you'),
     url(r'^msg', people_views.msg, {}, 'confirm'),
     url(r'^confirm/(?P<hash>.*)/yes', people_views.confirm_yes, {}, 'confirm-yes'),

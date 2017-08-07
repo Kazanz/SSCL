@@ -38,6 +38,13 @@ def clear(request):
     return redirect('/admin/')
 
 
+def callback(request):
+    with open("delete.txt", "a") as f:
+        f.write(json.dumps(request.GET))
+        f.write("DONE")
+    return HttpResponse(request.path)
+
+
 @require_http_methods(['POST'])
 def announcement(request):
     type_ = "error"

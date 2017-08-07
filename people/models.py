@@ -60,7 +60,7 @@ class MessageTracker(models.Model):
 
     @property
     def has_data(self):
-        return self.data['viewed'] and self.data['yes'] and self.data['no']
+        return self.data['viewed'] or self.data['yes'] or self.data['no']
 
     @staticmethod
     def current_tracker():
