@@ -93,3 +93,13 @@ def tracker_data(request):
             'viewed': tracker.view_names,
         }
     ))
+
+
+def sending_emails(request):
+    tracker = MessageTracker.objects.order_by('-pk').first()
+    return HttpResponse(json.dumps(tracker.sending_email))
+
+
+def sending_text(request):
+    tracker = MessageTracker.objects.order_by('-pk').first()
+    return HttpResponse(json.dumps(tracker.sending_text))

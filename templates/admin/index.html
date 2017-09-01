@@ -62,11 +62,6 @@ button {
         <button type="button" data-toggle="collapse" data-target="#collapseTextHistory" aria-expanded="false" aria-controls="collapseExample">
           Text History
         </button>
-        <a href="{% url 'unlock' %}">
-        <button type="button" style="background-color:#f96565;" id="unlock-tasks">
-          Unlock Tasks
-        </button>
-        </a>
 
         <hr>
 
@@ -247,6 +242,7 @@ function sendMessage(subject, body, txtbody, withlink) {
     });
 }
 
+
 $(".email-form").on('submit', function(e){
     e.preventDefault();
     subject = $('#subject').val()
@@ -273,35 +269,27 @@ $(".text-form").on('submit', function(e){
     }
 });
 
-(function pollEmail() {
-   setTimeout(function() {
-      $.ajax({ url: "{% url 'sending-email' %}", success: function(data) {
-           if (data == "yes") {
-               $('.sending-email').show()
-               $('.email-form').hide()
-           } else {
-               $('.sending-email').hide()
-               $('.email-form').show()
-           }
-           }, complete: pollEmail });
-    }, 3000);
-})();
+setInterval(function() {
+   $.ajax({ url: "{% url 'sending-email' %}", success: function(data) {
+        if (data == "yes") {
+            $('.sending-email').show()
+            $('.email-form').hide()
+        } else {
+            $('.sending-email').hide()
+            $('.email-form').show()
+        }}})
+   }, 3000);
 
-(function pollText() {
-   setTimeout(function() {
-      $.ajax({ url: "{% url 'sending-text' %}", success: function(data) {
-           if (data == "yes") {
-               $('.sending-text').show()
-               $('.text-form').hide()
-           } else {
-               $('.sending-text').hide()
-               $('.text-form').show()
-           }
-           }, complete: pollText });
-    }, 3000);
-})();
-
-
+setInterval(function() {
+   $.ajax({ url: "{% url 'sending-text' %}", success: function(data) {
+        if (data == "yes") {
+            $('.sending-text').show()
+            $('.text-form').hide()
+        } else {
+            $('.sending-text').hide()
+            $('.text-form').show()
+        }}});
+   }, 3000);
 
 </script>
 {% endblock %}
