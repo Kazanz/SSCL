@@ -43,13 +43,13 @@ def confirm_no(request, hash):
 
 
 def sending_email(request):
-    if MessageTracker.objects.order_by('-date').first().sending_email:
+    if MessageTracker.objects.order_by('-date').first().is_sending_email:
         return HttpResponse("yes")
     return HttpResponse("no")
 
 
 def sending_text(request):
-    if MessageTracker.objects.order_by('-date').first().sending_text:
+    if MessageTracker.objects.order_by('-date').first().is_sending_text:
         return HttpResponse("yes")
     return HttpResponse("no")
 

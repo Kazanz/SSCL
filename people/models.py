@@ -6,7 +6,7 @@ from django.conf import settings
 from django.db import models
 from jsonfield import JSONField
 
-from people.helpers import unique_hash
+from people.helpers import get_celery_worker_status, unique_hash
 
 
 class Announcement(models.Model):
@@ -30,6 +30,14 @@ class MessageTracker(models.Model):
 
     def __unicode__(self):
         return str(self.date)
+
+    @property
+    def is_sending_email(self):
+        return self.sending_email and not get_celery_worker_status.get('ERROR')
+
+    @property
+    def is_sending_text(self):
+        return self.sending_text and not get_celery_worker_status.get('ERROR')
 
     @property
     def yes_names(self):
