@@ -27,8 +27,8 @@ def email_total_stats():
             "start": start,
             "end": datetime.now().strftime('%s')}
     ).json()
-    totals['stats'].reverse()
-    return totals['stats']
+    totals.get('stats', []).reverse()
+    return totals.get('stats', [])
 
 
 def text_stats():

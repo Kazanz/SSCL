@@ -6,7 +6,8 @@ from people.models import MessageTracker, Waiver
 
 
 def waiver(request):
-    form = WaiverForm(request.POST or None)
+    waiver = Waiver.objects.filter(email=request.POST.get('email')).first()
+    form = WaiverForm(request.POST or None, instance=waiver)
     if form.is_valid():
         form.save()
         return redirect("thank-you")
