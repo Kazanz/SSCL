@@ -54,27 +54,28 @@ button {
 </div>
 <div class="row">
     {% for tracker in trackers %}
-        <div class="col-md-4">
-            <h4>{{ tracker.date }}</h4>
-            <table class="table table-striped yes-table">
-                <tr><th>Yes</th></tr>
-                {% for person in tracker.yes_names %}
-                <tr><td>{{ person }}</td></tr>
-                {% endfor %}
-            </table>
-            <table class="table table-striped no-table">
-                <tr><th>No</th></tr>
-                {% for person in tracker.no_names %}
-                <tr><td>{{ person }}</td></tr>
-                {% endfor %}
-            </table>
-            <table class="table table-striped view-table">
-                <tr><th>Viewed</th></tr>
-                {% for person in tracker.view_names %}
-                <tr><td>{{ person }}</td></tr>
-                {% endfor %}
-            </table>
-        </div>
+    <div class="col-md-3">
+        <h4>{{ tracker.date }}</h4>
+        <table class="table table-striped yes-table">
+            <tr><th>Yes <span class="badge">{{ tracker.yes_names|length }}</span></th></tr>
+            {% for person in tracker.yes_names %}
+            <tr><td>{{ person }}</td></tr>
+            {% endfor %}
+        </table>
+        <table class="table table-striped no-table">
+            <tr><th>No <span class="badge">{{ tracker.no_names|length }}</span></th></tr>
+            {% for person in tracker.no_names %}
+            <tr><td>{{ person }}</td></tr>
+            {% endfor %}
+        </table>
+        <table class="table table-striped view-table">
+            <tr><th>Viewed <span class="badge">{{ tracker.view_names|length }}</span></th></tr>
+            {% for person in tracker.view_names %}
+            <tr><td>{{ person }}</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% if forloop.counter|divisibleby:'4' %}</div><div class="row">{% endif %}
     {% endfor %}
 </div>
 

@@ -41,15 +41,15 @@ class MessageTracker(models.Model):
 
     @property
     def yes_names(self):
-        return self._names("yes")
+        return sorted(self._names("yes"))
 
     @property
     def no_names(self):
-        return self._names("no")
+        return sorted(self._names("no"))
 
     @property
     def view_names(self):
-        return self._names("viewed")
+        return sorted(self._names("viewed"))
 
     def _names(self, field):
         data = []
