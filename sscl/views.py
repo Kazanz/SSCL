@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 
 from people.models import Announcement, MessageTracker, Waiver
 from people.tasks import send_msg
@@ -95,11 +95,6 @@ def tracker_data(request):
     ))
 
 
-def sending_emails(request):
-    tracker = MessageTracker.objects.order_by('-pk').first()
-    return HttpResponse(json.dumps(tracker.sending_email))
-
-
-def sending_text(request):
-    tracker = MessageTracker.objects.order_by('-pk').first()
-    return HttpResponse(json.dumps(tracker.sending_text))
+def history(request):
+    trackers = MessageTracker.objects.order_by('-date').all()
+    return render(request, 'admin/history.html', {'trackers': trackers})

@@ -1,0 +1,122 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<!-- I know this is ghetto. Fix it once proof of concept is approved. -->
+<style>
+.stat-name {
+    font-weight: bold;
+}
+.dashboard #content {
+    width: 100%;
+}
+#content > h1 {
+    display: none;
+}
+.collapse .well {
+    padding: 20px; 
+}
+input, textarea {
+    margin-bottom: 10px !important;
+}
+
+button {
+    background: #79aec8;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    color: #fff !important;
+    cursor: pointer;
+}
+</style>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <h2>Response History</h2>
+    <button class="btn btn-primary" id="yes-btn">Yes</button>
+    <button class="btn btn-primary" id="no-btn">No</button>
+    <button class="btn btn-primary" id="view-btn">Viewed</button>
+    <hr>
+</div>
+<div class="row">
+    {% for tracker in trackers %}
+        <div class="col-md-4">
+            <h4>{{ tracker.date }}</h4>
+            <table class="table table-striped yes-table">
+                <tr><th>Yes</th></tr>
+                {% for person in tracker.yes_names %}
+                <tr><td>{{ person }}</td></tr>
+                {% endfor %}
+            </table>
+            <table class="table table-striped no-table">
+                <tr><th>No</th></tr>
+                {% for person in tracker.no_names %}
+                <tr><td>{{ person }}</td></tr>
+                {% endfor %}
+            </table>
+            <table class="table table-striped view-table">
+                <tr><th>Viewed</th></tr>
+                {% for person in tracker.view_names %}
+                <tr><td>{{ person }}</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+var yesTables = $('.yes-table');
+var yesButton = $('#yes-btn');
+var noTables = $('.no-table');
+var noButton = $('#no-btn');
+var viewTables = $('.view-table');
+var viewButton = $('#view-btn');
+
+yesButton.prop('disabled', true); 
+noTables.hide();
+viewTables.hide();
+
+yesButton.click(function() {
+    yesButton.prop('disabled', true); 
+    noButton.prop('disabled', false); 
+    viewButton.prop('disabled', false); 
+    yesTables.show();
+    noTables.hide();
+    viewTables.hide();
+});
+
+noButton.click(function() {
+    yesButton.prop('disabled', false); 
+    noButton.prop('disabled', true); 
+    viewButton.prop('disabled', false); 
+    yesTables.hide();
+    noTables.show();
+    viewTables.hide();
+});
+
+viewButton.click(function() {
+    yesButton.prop('disabled', false); 
+    noButton.prop('disabled', false); 
+    viewButton.prop('disabled', true); 
+    yesTables.hide();
+    noTables.hide();
+    viewTables.show();
+});
+</script>
+
+
+{% endblock %}

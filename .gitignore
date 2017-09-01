@@ -8,3 +8,6 @@ api/local.py
 sscl/local_settings.py
 db.sqlite3
 responses.csv
+
+cordova
+myApp

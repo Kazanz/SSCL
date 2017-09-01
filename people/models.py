@@ -52,7 +52,12 @@ class MessageTracker(models.Model):
         return self._names("viewed")
 
     def _names(self, field):
-        return [Waiver.objects.get(pk=pk).full_name for pk in self.data[field]]
+        data = []
+        for pk in self.data[field]:
+            waiver = Waiver.objects.filter(pk=pk).first()
+            if waiver:
+                data.append(waiver.full_name)
+        return data
 
     @property
     def view_count(self):

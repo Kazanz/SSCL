@@ -56,18 +56,6 @@ button {
         <button type="button" data-toggle="collapse" data-target="#collapseText" aria-expanded="false" aria-controls="collapseExample">
           Send Text <i class="fa fa-refresh fa-spin fa-3x fa-fw sending-text" style="display:{% if tracker.sending_text %}ignore{% else %}none{% endif %}"></i>
         </button>
-        <button type="button" data-toggle="collapse" data-target="#collapseEmailHistory" aria-expanded="false" aria-controls="collapseExample">
-          Email History
-        </button>
-        <button type="button" data-toggle="collapse" data-target="#collapseTextHistory" aria-expanded="false" aria-controls="collapseExample">
-          Text History
-        </button>
-        <a href="{% url 'unlock' %}">
-        <button type="button" style="background-color:#f96565;" id="unlock-tasks">
-          Unlock Tasks
-        </button>
-        </a>
-
         <hr>
 
         <div class="collapse in" id="collapseAnnouncement">
@@ -134,57 +122,10 @@ button {
             </div>
           </div>
         </div>
-
-
-        <div class="collapse" id="collapseEmailHistory">
-            <div class="well">
-                <div>
-                        <h3>Since: {{ filter_date }}</h3>
-                        <table class="table table-striped">
-                            <tr>
-                                <th>Date</th>
-                                <th>Accepted</th>
-                                <th>Delivered</th>
-                                <th>Failed</th>
-                            </tr>
-                            {% for stat in email_totals %}
-                            <tr>
-                                <td>{{ stat.time }}</td>
-                                <td>{{ stat.accepted.total }}</td>
-                                <td>{{ stat.delivered.total }}</td>
-                                <td>{{ stat.failed.permanent.total }}</td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="collapse" id="collapseTextHistory">
-            <div class="well">
-                <div>
-                        <h3>Since: {{ filter_date }}</h3>
-                        <table class="table table-striped">
-                            <tr>
-                                <th>Date</th>
-                                <th>Number</th>
-                                <th>Status</th>
-                            </tr>
-                            {% for stat in text_stats %}
-                            <tr>
-                                <td>{{ stat.date }}</td>
-                                <td>{{ stat.to }}</td>
-                                <td>{{ stat.status }}</td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="col-md-4">
-        <a style="float:right;" href="{% url 'clear' %}"><button>Clear</button></a>
+        <a style="float:right;" href="{% url 'clear' %}"><button class="btn btn-danger">Clear</button></a>
       <div>
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"><a href="#yes" aria-controls="yes" role="tab" data-toggle="tab">Yes <span class="badge">{{ tracker.yes_count }}</span></a></li>

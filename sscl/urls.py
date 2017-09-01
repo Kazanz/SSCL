@@ -22,6 +22,7 @@ from sscl import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^clear/', views.clear, {}, 'clear'),
+    url(r'^history/', views.history, {}, 'history'),
     url(r'^announcement/', views.announcement, {}, 'announcement'),
     url(r'^callback/', views.callback, {}, 'callback'),
     url(r'^thank-you/', people_views.thank_you, {}, 'thank-you'),
