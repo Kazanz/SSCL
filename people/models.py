@@ -33,11 +33,11 @@ class MessageTracker(models.Model):
 
     @property
     def is_sending_email(self):
-        return self.sending_email and not get_celery_worker_status.get('ERROR')
+        return self.sending_email and not get_celery_worker_status().get('ERROR')
 
     @property
     def is_sending_text(self):
-        return self.sending_text and not get_celery_worker_status.get('ERROR')
+        return self.sending_text and not get_celery_worker_status().get('ERROR')
 
     @property
     def yes_names(self):
