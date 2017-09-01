@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from people.forms import WaiverForm
-from people.models import MessageTracker, Waiver
+from people.models import MessageTracker, Waiver, ReceivedText
 
 
 def waiver(request):
@@ -60,3 +60,8 @@ def unlock(request):
     tracker.sending_text = False
     tracker.save()
     return redirect('/admin/')
+
+
+def receive_text(request):
+    ReceivedText.create(request.GET)
+    return HttpResponse(200)

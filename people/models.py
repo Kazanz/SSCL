@@ -241,3 +241,15 @@ class Waiver(models.Model):
                    'onMouseOut="this.style.height=\'40px\'"' \
                    'src="data:image/png;base64,{}"/>'.format(self.image)
     photo.allow_tags = True
+
+
+class ReceivedText(models.Model):
+    waiver = models.ForeignKey(Waiver)
+    text = models.CharField(max_length=255)
+
+    @classmethod
+    def create(cls, sms):
+        phone = sms['msisdn'][1:] # Strip the leading +1 country code.
+        waiver = Waiver.objects.filter(phone=phone).first()
+        if waiver:
+            instance = cls.objects.create(waiver=waiver, text=sms['text'])

@@ -164,6 +164,17 @@ button {
                </table>
            </div>
         </div>
+        <br>
+        <br>
+        <h4 style="float:left">Received Texts</h4>
+        <a style="float:right;" href="{% url 'clear-texts' %}"><button class="btn btn-danger">Clear</button></a>
+        <hr>
+        {% for text in received_texts %}
+        <hr>
+        <p><b>From: </b><br>{{ text.waiver.full_name }} <i>({{ text.waiver.phone }})</i></p>
+        <p><b>Message: </b><br>{{ text.text }}</p>
+        <hr>
+        {% endfor %}
     </div>
 
 </div>

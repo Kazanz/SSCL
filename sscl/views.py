@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect, get_object_or_404, render
 
-from people.models import Announcement, MessageTracker, Waiver
+from people.models import Announcement, MessageTracker, Waiver, ReceivedText
 from people.tasks import send_msg
 
 
@@ -35,6 +35,13 @@ def clear(request):
     elif tracker:
         tracker.date = datetime.now()
         tracker.save()
+    messages.success(request, "View tracker cleared.")
+    return redirect('/admin/')
+
+
+def clear_texts(request):
+    ReceivedText.objects.all().delete()
+    messages.success(request, "Received texts cleared.")
     return redirect('/admin/')
 
 

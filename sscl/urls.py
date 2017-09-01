@@ -22,6 +22,7 @@ from sscl import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^clear/', views.clear, {}, 'clear'),
+    url(r'^clear-texts/', views.clear_texts, {}, 'clear-texts'),
     url(r'^history/', views.history, {}, 'history'),
     url(r'^announcement/', views.announcement, {}, 'announcement'),
     url(r'^callback/', views.callback, {}, 'callback'),
@@ -37,5 +38,6 @@ urlpatterns = [
     url(r'^api/image/', views.image_update, {}, 'image'),
     url(r'^api/waivers/', views.waiver_data, {}, 'waiver-data'),
     url(r'^api/tracker/', views.tracker_data, {}, 'tracker-data'),
+    url(r'^receive/', people_views.receive_text, {}, 'receive-text'),
     url(r'^$', people_views.waiver, {}, 'waiver'),
 ]
