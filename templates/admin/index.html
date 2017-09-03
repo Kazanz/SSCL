@@ -128,9 +128,9 @@ button {
         <a style="float:right;" href="{% url 'clear' %}"><button class="btn btn-danger">Clear</button></a>
       <div>
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#yes" aria-controls="yes" role="tab" data-toggle="tab">Yes <span class="badge">{{ tracker.yes_count }}</span></a></li>
-          <li role="presentation"><a href="#no" aria-controls="no" role="tab" data-toggle="tab">No <span class="badge">{{ tracker.no_count }}</span></a></li>
-          <li role="presentation"><a href="#view" aria-controls="view" role="tab" data-toggle="tab">Viewed <span class="badge">{{ tracker.view_count }}</span></a></li>
+          <li role="presentation" class="active"><a href="#yes" aria-controls="yes" role="tab" data-toggle="tab">Yes <span class="badge">{{ tracker.yes_names|length }}</span></a></li>
+          <li role="presentation"><a href="#no" aria-controls="no" role="tab" data-toggle="tab">No <span class="badge">{{ tracker.no_names|length }}</span></a></li>
+          <li role="presentation"><a href="#view" aria-controls="view" role="tab" data-toggle="tab">Viewed <span class="badge">{{ tracker.view_names|length }}</span></a></li>
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="yes">
@@ -164,7 +164,6 @@ button {
                </table>
            </div>
         </div>
-        <br>
         <br>
         <h4 style="float:left">Received Texts</h4>
         <a style="float:right;" href="{% url 'clear-texts' %}"><button class="btn btn-danger">Clear</button></a>
