@@ -152,3 +152,5 @@ MAIL_GUN_TOTAL_STATS_URL = "https://api.mailgun.net/v3/sscl.info/stats/total"
 MAIL_GUN_STATS_URL = "https://api.mailgun.net/v3/sscl.info/stats"
 
 APPEND_SLASH = True
+
+LINK_TEMPLATE_TAG = '[link]'

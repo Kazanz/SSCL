@@ -12,6 +12,7 @@ from people.models import Waiver, MessageTracker, SendHistory
 
 DEBUG = settings.DEBUG
 BASE_URL = settings.BASE_URL
+LINK_TEMPLATE_TAG = settings.LINK_TEMPLATE_TAG
 
 
 def catch_error(f, method, waiver, history, *args):
@@ -65,7 +66,13 @@ def send_msg(subject, body=None, txtbody=None, withlink=True):
 def make_msg(body, hash):
     link = "{}/confirm/{}/".format(BASE_URL, hash)
     body = unicodedata.normalize("NFKD", body).encode('ascii', 'ignore')
-    return "{}\n{}".format(link, body)
+
+    try:
+        body.index(LINK_TEMPLATE_TAG)
+    except ValueError:
+        return "{}\n{}".format(link, body)
+    else:
+        return body.replace(LINK_TEMPLATE_TAG, link)
 
 
 def send_with_mailgun(to, subject, msg):
