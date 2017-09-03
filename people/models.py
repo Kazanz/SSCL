@@ -84,28 +84,30 @@ class MessageTracker(models.Model):
     def viewed(waiver):
         tracker = MessageTracker.current_tracker()
         if waiver and waiver.pk not in tracker.data['viewed']:
-            MessageTracker.add_to_data('viewed', waiver.pk, tracker)
+            MessageTracker.add_to_data('viewed', waiver, tracker)
 
     @staticmethod
     def yes(waiver):
         tracker = MessageTracker.current_tracker()
         if waiver and waiver.pk not in tracker.data['yes']:
-            MessageTracker.add_to_data('yes', waiver.pk, tracker)
+            MessageTracker.add_to_data('yes', waiver, tracker)
 
     @staticmethod
     def no(waiver):
         tracker = MessageTracker.current_tracker()
         if waiver and waiver.pk not in tracker.data['no']:
-            MessageTracker.add_to_data('no', waiver.pk, tracker)
+            MessageTracker.add_to_data('no', waiver, tracker)
 
     @staticmethod
-    def add_to_data(key, value, tracker):
+    def add_to_data(key, waiver, tracker):
         data = tracker.data
         data_list = data[key]
-        data_list.append(value)
+        data_list.append(waiver.pk)
         data[key] = data_list
         tracker.data = data
         tracker.save()
+        waiver.last_interaction = datetime.now()
+        waiver.save()
 
 
 class SendHistory(models.Model):
@@ -196,6 +198,7 @@ class Waiver(models.Model):
     confirmed = models.BooleanField(default=False, blank=True)
     sent = models.DateTimeField(blank=True, null=True)
     hash = models.CharField(max_length=8, blank=True, null=True)
+    last_interaction = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return self.first + " " + self.last
@@ -244,8 +247,7 @@ class Waiver(models.Model):
     photo.allow_tags = True
 
     @property
-    def last_interaction(self):
-        # This is slow on the admin list page, consider optimizing.
+    def _last_interaction_from_message_tracker(self):
         for m in MessageTracker.objects.all():
             waiver_pks = reduce(lambda x, y: x + y, m.data.values())
             if self.pk in waiver_pks:
