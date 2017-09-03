@@ -24,6 +24,7 @@ class WaiverAdmin(admin.ModelAdmin):
         'created',
         'confirmed',
         'sent',
+        'last_interaction',
     )
 
 

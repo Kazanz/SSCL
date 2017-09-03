@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import json
 import re
 
 from django.conf import settings
@@ -241,6 +242,14 @@ class Waiver(models.Model):
                    'onMouseOut="this.style.height=\'40px\'"' \
                    'src="data:image/png;base64,{}"/>'.format(self.image)
     photo.allow_tags = True
+
+    @property
+    def last_interaction(self):
+        # This is slow on the admin list page, consider optimizing.
+        for m in MessageTracker.objects.all():
+            waiver_pks = reduce(lambda x, y: x + y, m.data.values())
+            if self.pk in waiver_pks:
+                return m.date
 
 
 class ReceivedText(models.Model):
