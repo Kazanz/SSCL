@@ -248,7 +248,7 @@ class Waiver(models.Model):
 
     @property
     def _last_interaction_from_message_tracker(self):
-        for m in MessageTracker.objects.all():
+        for m in MessageTracker.objects.order_by('-date').all():
             waiver_pks = reduce(lambda x, y: x + y, m.data.values())
             if self.pk in waiver_pks:
                 return m.date
