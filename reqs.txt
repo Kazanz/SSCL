@@ -46,6 +46,7 @@ pyOpenSSL==0.15.1
 python-dateutil==2.4.2
 pytz==2015.7
 PyYAML==3.11
+redis
 requests==2.9.1
 rsa==3.2.3
 simplegeneric==0.8.1

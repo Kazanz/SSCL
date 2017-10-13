@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect, get_object_or_404, render
 
 from people.models import Announcement, MessageTracker, Waiver, ReceivedText
-from people.tasks import send_msg
+from people.tasks import send_messages
 
 
 @require_http_methods(['POST'])
@@ -20,7 +20,7 @@ def send_emails(request):
         txtbody = request.POST.get("txtbody")
         withlink = request.POST.get("withlink")
         if withlink and ((body and subject) or txtbody):
-            send_msg.delay(subject, body, txtbody, withlink == "true")
+            send_messages(subject, body, txtbody, withlink == "true")
             messages.success(request, "Your messages are being sent.")
             return HttpResponse(200)
         messages.error(request, "An error occured, please try again.")

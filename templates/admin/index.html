@@ -225,6 +225,9 @@ $(".text-form").on('submit', function(e){
     }
 });
 
+$('.sending-email').hide()
+$('.sending-text').hide()
+
 setInterval(function() {
    $.ajax({ url: "{% url 'sending-email' %}", success: function(data) {
         if (data == "yes") {

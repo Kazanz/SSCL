@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -65,3 +67,17 @@ def unlock(request):
 def receive_text(request):
     ReceivedText.create(request.GET)
     return HttpResponse(200)
+
+
+def delivery(request):
+    with open('/tmp/delivery.log', 'a') as f:
+        f.write(json.dumps(request.GET))
+    return HttpResponse(200)
+
+
+def view_deliver_log(request):
+    log = []
+    with open('/tmp/delivery.log', 'r') as f:
+        for line in f.readlines()[-500:]:
+           log.append(line)
+    return render(request, 'delivery.html', {'lines': log})

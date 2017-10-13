@@ -6,6 +6,7 @@ import nexmo
 import requests
 from celery import shared_task
 from django.conf import settings
+from twilio.rest import Client
 
 from people.models import Waiver, MessageTracker, SendHistory
 
@@ -32,8 +33,19 @@ def catch_error(f, method, waiver, history, *args):
         history.save()
 
 
+def send_messages(subject, body=None, txtbody=None, withlink=True):
+    send_all.delay(subject, body, txtbody, withlink)
+
 @shared_task
-def send_msg(subject, body=None, txtbody=None, withlink=True):
+def send_all(subject, body=None, txtbody=None, withlink=True):
+    for waiver in Waiver.objects.all():
+        try:
+            send_msg(waiver, subject, body, txtbody, withlink)
+        except:
+            pass
+
+#@shared_task
+def send_msg(waiver, subject, body=None, txtbody=None, withlink=True):
     tracker = MessageTracker.objects.order_by('-date').first()
     if body:
         tracker.sending_email = True
@@ -43,25 +55,20 @@ def send_msg(subject, body=None, txtbody=None, withlink=True):
 
     history = SendHistory.objects.create(tracker=tracker)
 
-    for waiver in Waiver.objects.all():
-        if body:
-            msg = make_msg(body, waiver.hash) if withlink else body
-            catch_error(send_with_mailgun, 'email', waiver, history,
-                        waiver.email, subject, msg)
-        if txtbody:
-            textmsg = make_msg(txtbody, waiver.hash)
-            catch_error(send_with_nexmo, 'txt', waiver, history,
-                        waiver.phone, textmsg, tracker)
-        waiver.sent = datetime.now()
-        waiver.save()
-        sleep(2)
-
     if body:
-        tracker.sending_email = False
+        msg = make_msg(body, waiver.hash) if withlink else body
+        catch_error(send_with_mailgun, 'email', waiver, history,
+                    waiver.email, subject, msg)
     if txtbody:
-        tracker.sending_text = False
-    tracker.save()
+        textmsg = make_msg(txtbody, waiver.hash)
+        catch_error(send_with_nexmo, 'txt', waiver, history,
+                    waiver.phone, textmsg, tracker)
+    waiver.sent = datetime.now()
+    waiver.save()
 
+    tracker.sending_email = False
+    tracker.sending_text = False
+    tracker.save()
 
 def make_msg(body, hash):
     link = "{}/confirm/{}/".format(BASE_URL, hash)
@@ -90,7 +97,7 @@ def send_with_nexmo(number, msg, tracker):
         number = "8133893559"
     client = nexmo.Client(key=settings.NEXMO_KEY, secret=settings.NEXMO_SECRET)
     res = client.send_message({
-        'from': '18552436932',
+        'from': '18134363052',
         'to': "1" + number,
         'text': msg
     })
@@ -103,3 +110,43 @@ def send_with_nexmo(number, msg, tracker):
                 ids.append(msg_id)
         tracker.nexmo_ids = ids
         tracker.save()
+
+
+def send_with_twilio(number, msg, tracker):
+    if settings.DEBUG:
+        number = "8133893559"
+    account_sid = '...'
+    auth_token = "..."
+    client = Client(account_sid, auth_token)
+    message = client.messages.create(
+        body=msg,
+        from_='+17272058646',
+        to="+1" + number,
+    )
+
+
+def send_msg_sync(waiver, subject, body=None, txtbody=None, withlink=True):
+    tracker = MessageTracker.objects.order_by('-date').first()
+    if body:
+        tracker.sending_email = True
+    if txtbody:
+        tracker.sending_text = True
+    tracker.save()
+
+    history = SendHistory.objects.create(tracker=tracker)
+
+    if body:
+        msg = make_msg(body, waiver.hash) if withlink else body
+        catch_error(send_with_mailgun, 'email', waiver, history,
+                    waiver.email, subject, msg)
+    if txtbody:
+        textmsg = make_msg(txtbody, waiver.hash)
+        catch_error(send_with_nexmo, 'txt', waiver, history,
+                    waiver.phone, textmsg, tracker)
+    waiver.sent = datetime.now()
+    waiver.save()
+
+    tracker.sending_email = False
+    tracker.sending_text = False
+    tracker.save()
+

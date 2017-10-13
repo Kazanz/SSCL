@@ -138,8 +138,7 @@ EMAIL_HOST_USER = DEFAULT_FROM_EMAIL = 'ssclbasketball@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 
 
-BROKER_URL = 'django://'
-CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+BROKER_URL = 'redis://127.0.0.1:6379/0'
 
 BASE_URL = "http://sscl.info"
 

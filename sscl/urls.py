@@ -39,5 +39,7 @@ urlpatterns = [
     url(r'^api/waivers/', views.waiver_data, {}, 'waiver-data'),
     url(r'^api/tracker/', views.tracker_data, {}, 'tracker-data'),
     url(r'^receive/', people_views.receive_text, {}, 'receive-text'),
+    url(r'^delivery/', people_views.delivery, {}, 'delivery'),
+    url(r'^view-delivery/', people_views.view_deliver_log, {}, 'delivery-view'),
     url(r'^$', people_views.waiver, {}, 'waiver'),
 ]
