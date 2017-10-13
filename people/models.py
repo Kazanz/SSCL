@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import json
 import re
 
+from datetime import datetime
 from django.conf import settings
 from django.db import models
 from jsonfield import JSONField
@@ -192,7 +193,7 @@ class Waiver(models.Model):
     last = models.CharField(max_length=40)
     email = models.EmailField(max_length=40)
     phone = models.CharField(max_length=16)
-    carrier = models.CharField(max_length=40, choices=CARRIERS)
+    carrier = models.CharField(max_length=40, choices=CARRIERS, blank=True, null=True)
     dob = models.DateField()
     signature = models.CharField(max_length=40)
     confirmed = models.BooleanField(default=False, blank=True)

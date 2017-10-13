@@ -25,7 +25,7 @@ class WaiverForm(forms.ModelForm):
 
     class Meta:
         model = Waiver
-        exclude = ('created', 'confirmed', 'hash', 'sent', 'image')
+        exclude = ('created', 'confirmed', 'hash', 'sent', 'image', 'last_interaction', 'carrier')
         widgets = {
             'dob': Html5DateInput()
         }
